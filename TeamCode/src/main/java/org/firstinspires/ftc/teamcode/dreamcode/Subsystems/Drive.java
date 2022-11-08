@@ -16,7 +16,7 @@ public class Drive implements Subsystem {
     DcMotorEx bl;
     DcMotorEx br;
     DcMotorEx[] driveMotors;
-    double kp = 0.5, kv = 1/Motors.GoBILDA_435.getSurfaceVelocity(2), ka = 0, kpa = 0.5, kp1 = 0.45;
+    double kp = 0.5, kv = 1/Motors.GoBILDA_435.getSurfaceVelocity(2), ka = 0, kpa = 4, kp1 = 3;
 
     public Drive(DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         this.fl = fl;
@@ -77,10 +77,11 @@ public class Drive implements Subsystem {
      * @param mode Drivetrain Speed Setting (Sport, Normal, Economy)
      */
     public void POVMecanumDrive(double y, double x, double turn, DriveMode mode) {
-        double v1 = -(y - (turn * Constants.turnScale) - (x/Constants.strafeScale));
-        double v2 = -(y - (turn * Constants.turnScale) + (x/Constants.strafeScale));
-        double v3 = -(y + (turn * Constants.turnScale) - (x/Constants.strafeScale));
-        double v4 = -(y + (turn * Constants.turnScale) + (x/Constants.strafeScale));
+        double v1 = -(-y - (turn * Constants.turnScale) - (x/Constants.strafeScale));
+        double v2 = -(-y - (turn * Constants.turnScale) + (x/Constants.strafeScale));
+        double v3 = -(-y + (turn * Constants.turnScale) - (x/Constants.strafeScale));
+        double v4 = -(-y + (turn * Constants.turnScale) + (x/Constants.strafeScale)) *
+                Motors.GoBILDA_435.getRPM()/Motors.GoBILDA_312.getRPM();
 
         double v = Math.max(Math.max(Math.max(Math.abs(v1), Math.abs(v2)), Math.abs(v3)), Math.abs(v4));
         if (v > 1) {
@@ -104,9 +105,9 @@ public class Drive implements Subsystem {
      * @param mode Drivetrain Speed Setting (Sport, Normal, Economy)
      */
     public void FCMecanumDrive(double y, double x, double turn, DriveMode mode, StateEstimator robot) {
-        x = x * Math.cos(robot.getA()) - y * Math.sin(robot.getA());
-        y = x * Math.sin(robot.getA()) + y * Math.cos(robot.getA());
-        POVMecanumDrive(y, x, turn, mode);
+        double x2 = x * Math.cos(robot.getA()) - y * Math.sin(robot.getA());
+        double y2 = x * Math.sin(robot.getA()) + y * Math.cos(robot.getA());
+        POVMecanumDrive(y2, x2, turn, mode);
     }
 
 
@@ -140,15 +141,15 @@ public class Drive implements Subsystem {
     public boolean WaypointDrive(StateEstimator robot, Profile xp, Profile yp, double af, double tx,
                                  double ty, double ta, double dx, double dy, double da, double time) {
         double ea = MathFx.radAngleWrap(af - robot.getA());
-        double exp = (xp.getPosition(time) - robot.getX());
-        double eyp = (yp.getPosition(time) - robot.getY());
-        double exv = (xp.getVelocity(time) - robot.getX_dot());
-        double eyv = (yp.getVelocity(time) - robot.getY_dot());
+        double exp = (xp.getSetPoint() - robot.getX());
+        double eyp = (yp.getSetPoint() - robot.getY());
+        //double exv = (xp.getVelocity(time) - robot.getX_dot());
+        //double eyv = (yp.getVelocity(time) - robot.getY_dot());
         if (ea*da > ta || exp*dx > tx || eyp*dy > ty) {
             double ua = kpa * ea;
-            double ux = kp1 * exp + kv * exv;
-            double uy = kp1 * eyp + kv * eyv;
-            FCMecanumDrive(-ux, -uy, ua, DriveMode.Sport, robot);
+            double ux = kp1 * exp /*+ kv * exv*/;
+            double uy = kp1 * eyp /*+ kv * eyv*/;
+            FCMecanumDrive(ux, uy, ua, DriveMode.Optimized, robot);
             return false;
         } else {
             stop();

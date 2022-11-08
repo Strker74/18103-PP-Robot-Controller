@@ -5,10 +5,11 @@ import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
 public final class Constants {
     // Drive Subsystem
-    public static final double L = 13.5d; // Wheel Base Separation (in)
-    public static final double B = 16.5d; // Wheel Base Separation (in)
+    public static final double L = 12; // Wheel Base Separation (in)
+    public static final double B = 12; // Wheel Base Separation (in)
     public static final double R = 50/25.4; // Drive Wheel Radius (in)
     public static final double COLLISION_THRESHOLD_DELTA_G = 0.5;
+    public static final double tile = 24;
 
     // Vuforia Vision
     public static final String VUFORIA_KEY = "AWWCp8z/////AAABmQqV/K50N0OTqlyIYanMsyQ6huM5ckTKtdjF0/gyTwTINZPIGhLWxx3ag5PUmAw90BOHnZh3arwMSH0sjWZUM7wTJG/rcPmsj3MFp2eSPPc+osid/6jBjyg8YuhBYFN8jO3YvFlo/24qqX8K1DWOX8GU7dAfZEIhI71HCmY+pRWIGxKWyXxkpf3xULPPommaHqF7wSA/z37uQs+zSTs9SJKxiGvUlF7oYkVkURIuzovMKiK7rRqQT/dmCKH/JFpxgl8Er3O50/DL03EMmmNbjkiqA4vAU7wwD8rTkHympjAl7MnSmQRtXWxyRUildftpaQr7rD8vuz+4A6j/+/nKeTUanIi1fPMuE0Xa+Cth7SDr";
@@ -28,8 +29,6 @@ public final class Constants {
             CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT, phoneXRotate, phoneYRotate,
             phoneZRotate);
 
-    public static double strafeScale = 0.5;
-    public static double turnScale = 1;
-    //public static final double drivePIDMagicNumber = 9.2;
-
+    public static final double strafeScale = 1;
+    public static final double turnScale = 1;
 }

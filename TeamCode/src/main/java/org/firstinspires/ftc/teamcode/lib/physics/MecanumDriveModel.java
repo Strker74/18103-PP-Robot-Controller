@@ -11,10 +11,10 @@ public class MecanumDriveModel implements Model {
 
 
     public MecanumDriveModel(double r, double l, double b) {
-        fl = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 0.8, 1);
-        fr = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 0.8, 1);
-        bl = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 0.8, 1);
-        br = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 0.8, 1);
+        fl = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
+        fr = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
+        bl = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
+        br = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
         driveMotors = new MotorModel[]{fl, fr, bl, br};
         this.r = r;
         this.b = b / 2;
@@ -27,7 +27,7 @@ public class MecanumDriveModel implements Model {
         for (int i = 0; i * 0.01 < 5; i++) {
             System.out.print(i + " ");
             model.run(12d, 12d, 12d, 12d,0.01);
-            System.out.println(model.getX());
+            System.out.println(model.getY());
             //prev_time = timeStamp;
         }
     }
@@ -38,26 +38,21 @@ public class MecanumDriveModel implements Model {
         bl.run(blPow, dt);
         br.run(brPow, dt);
 
-        xd = r * (bl.getV() + br.getV() + fl.getV() + fr.getV())/4;
-        yd = r * (bl.getV() - br.getV() - fl.getV() + fr.getV())/4;
-        Td = r * (-bl.getV() + br.getV() - fl.getV() + fr.getV())/(4 * (l + b));
+        yd = r * (bl.getV() + br.getV() + fl.getV() + fr.getV())/4;
+        xd = r * -(bl.getV() - br.getV() - fl.getV() + fr.getV())/4;
+        Td = r * -(-bl.getV() + br.getV() - fl.getV() + fr.getV())/(4 * Math.hypot(l, b));
 
-        xd = Math.cos(T)*xd - Math.sin(T)*yd;
-        yd = Math.sin(T)*xd + Math.cos(T)*yd;
-
-        x += xd*dt;
-        y += yd*dt;
         T += Td*dt;
+
+        double xd2 = Math.cos(T)*xd - Math.sin(T)*yd;
+        double yd2 = Math.sin(T)*xd + Math.cos(T)*yd;
+
+        x += xd2*dt;
+        y += yd2*dt;
     }
 
     public void run(double pow, double dt) {
-        for (MotorModel i : driveMotors) {i.run(pow, dt);}
-        xd = r * (bl.getV() + br.getV() + fl.getV() + fr.getV())/4;
-        yd = r * (bl.getV() - br.getV() - fl.getV() + fr.getV())/4;
-        yd = r * (-bl.getV() + br.getV() - fl.getV() + fr.getV())/(4 * (l + b));
-        x += xd*dt;
-        y += yd*dt;
-        T += Td*dt;
+        run(pow, pow, pow, pow, dt);
     }
 
     public void reset() {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.dreamcode.States.DriveStates;
+package org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
@@ -99,8 +99,7 @@ public class IMU extends DriveState {
         telemetry.addData("Collision: ", getCollision(curAcc, acc));
         telemetry.addData("X: ", getX());
         telemetry.addData("Y: ", getY());
-        telemetry.addData("A: ", getA());
-
+        telemetry.addData("IMU A: ", getA());
          */
 
         acc = curAcc;
@@ -111,12 +110,8 @@ public class IMU extends DriveState {
         double currentJerkX = curA.X() - prevA.X();
         double currentJerkY = curA.Y() - prevA.Y();
 
-        if ( ( Math.abs(currentJerkX) > Constants.COLLISION_THRESHOLD_DELTA_G ) ||
-                ( Math.abs(currentJerkY) > Constants.COLLISION_THRESHOLD_DELTA_G) ) {
-            collision = true;
-        } else {
-            collision = false;
-        }
+        collision = (Math.abs(currentJerkX) > Constants.COLLISION_THRESHOLD_DELTA_G) ||
+                (Math.abs(currentJerkY) > Constants.COLLISION_THRESHOLD_DELTA_G);
 
         return collision;
     }

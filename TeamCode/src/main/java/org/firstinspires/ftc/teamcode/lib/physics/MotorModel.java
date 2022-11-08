@@ -16,7 +16,7 @@ public class MotorModel implements Model {
 
         for (int i = 0; i <= 7; i++) {
             System.out.print(i + " ");
-            motor.run(12, 0.01);
+            motor.run(12, 1);
             System.out.println(motor.v + " " + motor.p);
             //prev_time = timeStamp;
         }
@@ -42,14 +42,14 @@ public class MotorModel implements Model {
     }
 
     public void run(double pow, double dt) {
-        a = MathFx.scale(-maxA, accelerate(pow), maxA);
-        v += MathFx.scale(-maxV, a * dt, maxV);
+        a = MathFx.scale(-maxA, maxA, accelerate(pow));
+        v = MathFx.scale(-maxV, maxV, v + a * dt);
         p += v * dt;
     }
 
     public double accelerate(double pow) {
         pow = MathFx.scale(-maxP, maxP, pow);
-        return eff*gr*kT*(pow - v/kV)/(R * J);
+        return eff*gr*kT*(pow - gr*v*kV)/(R * J);
     }
 
     public void reset() {

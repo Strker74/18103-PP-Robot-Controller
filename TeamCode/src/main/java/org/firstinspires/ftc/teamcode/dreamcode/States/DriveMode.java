@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.dreamcode.States;
 public enum DriveMode {
 
     Sport(1, 1, "Sport"),
-    Optimized(0.5,  0, "Balanced"),
+    Optimized(0.75,  0, "Balanced"),
     Economy(0.25, -1, "Economy");
 
     private final double scaling;

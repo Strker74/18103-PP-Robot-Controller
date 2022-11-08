@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.dreamcode.Constants;
-import org.firstinspires.ftc.teamcode.dreamcode.States.DriveStates.IMU;
-import org.firstinspires.ftc.teamcode.dreamcode.States.DriveStates.MKE;
+import org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators.IMU;
+import org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators.MKE;
 import org.firstinspires.ftc.teamcode.dreamcode.States.State;
 import org.firstinspires.ftc.teamcode.lib.drivers.Motors;
 import org.firstinspires.ftc.teamcode.lib.physics.Kinematic;
@@ -50,11 +50,11 @@ public class StateEstimator implements Subsystem, State {
         mke.update(dt, telemetry);
         pos = Kinematic.dataFusion(new Kinematic[]{imu.getPos(), mke.getPos()}, weights);
         pos = pos.add(new Kinematic(x0, y0));
-        a = MathFx.meanDataFusion(new double[]{mke.getA()}, new double[]{1}, a0);
+        a = MathFx.meanDataFusion(new double[]{mke.getA(), imu.getA()}, new double[]{1, 0}, a0);
         vel = new Kinematic(mke.getX_dot(), mke.getY_dot());
         telemetry.addData("X: ", pos.X());
         telemetry.addData("Y: ", pos.Y());
-        telemetry.addData("A: ", a);
+        telemetry.addData("A: ", Math.toDegrees(a));
 
         if (spinner != null) {
             s = MathFx.lowPassFilter(0.75, sI, spinner.getCurrentPosition() * Motors.GoBILDA_223.getDistPerTicks(96/Constants.mmPerInch));

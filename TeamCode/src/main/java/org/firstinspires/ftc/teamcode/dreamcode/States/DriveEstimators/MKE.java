@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.dreamcode.States.DriveStates;
+package org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -104,23 +104,26 @@ public class MKE extends DriveState {
 
      */
     public void update(double dt, Telemetry telemetry) {
-        double fl_1 = (MathFx.lowPassFilter(0.9, -fl.getCurrentPosition(), fl_0) - fl_0)/dt;
-        double fr_1 = (MathFx.lowPassFilter(0.9, -fr.getCurrentPosition(), fr_0) - fr_0)/dt;
+        double fl_1 = (MathFx.lowPassFilter(0.9, fl.getCurrentPosition(), fl_0) - fl_0)/dt;
+        double fr_1 = (MathFx.lowPassFilter(0.9, fr.getCurrentPosition(), fr_0) - fr_0)/dt;
         double bl_1 = (MathFx.lowPassFilter(0.9, bl.getCurrentPosition(), bl_0) - bl_0)/dt;
         double br_1 = (MathFx.lowPassFilter(0.9, br.getCurrentPosition(), br_0) - br_0)/dt;
 
-        /*telemetry.addData("fl: ", fl.getCurrentPosition());
-        telemetry.addData("fr: ", fr.getCurrentPosition());
-        telemetry.addData("bl: ", bl.getCurrentPosition());
-        telemetry.addData("br: ", br.getCurrentPosition());*/
+//        telemetry.addData("fl: ", fl.getCurrentPosition());
+//        telemetry.addData("fr: ", fr.getCurrentPosition());
+//        telemetry.addData("bl: ", bl.getCurrentPosition());
+//        telemetry.addData("br: ", br.getCurrentPosition());
 
-        x_dot = Motors.GoBILDA_435.getDistPerTicks(Constants.R) * (fr_1 + bl_1 + br_1 + fl_1) / 6;// /4 * 2/3 scale factor
-        y_dot = Motors.GoBILDA_435.getDistPerTicks(Constants.R) * (-fr_1 + bl_1 - br_1 + fl_1) * 9 / 56; // 6/7 * 3/4
-        a_dot = Motors.GoBILDA_435.getDistPerTicks(Constants.R) * (-fr_1 - bl_1 + br_1 + fl_1) / (4 * 1.1 * (Constants.L/2 + Constants.B/2));
+        double f = Motors.GoBILDA_435.getDistPerTicks(Constants.R);
+        double g = Motors.GoBILDA_312.getDistPerTicks(Constants.R);
+
+        x_dot =  (f*(fl_1 + bl_1 + br_1) + g*fr_1) / 4;
+        y_dot = (f*(fl_1 - bl_1 + br_1) - g*fr_1) *.85 / 4;
+        a_dot = (f*bl_1 - g*fr_1) * 2 / (3 * 4 * Constants.L/2);
 
         theta += a_dot*dt;
 
-        /*telemetry.addData("Theta: ", theta);*/
+        //telemetry.addData("Theta: ", Math.toDegrees(theta));
 
         double xd = x_dot*Math.cos(theta) - y_dot*Math.sin(theta);
         double yd = x_dot*Math.sin(theta) + y_dot*Math.cos(theta);
@@ -131,19 +134,20 @@ public class MKE extends DriveState {
         //telemetry.addData("DXA: ", x_dot);
         //telemetry.addData("DYA: ", y_dot);
 
-        x += x_dot*dt;
-        y += y_dot*dt;
+        // 2/3 for the pulley ratio
+        x += x_dot*2/3*dt;
+        y += y_dot*2/3*dt;
 
         fl_0 += fl_1*dt;
         fr_0 += fr_1*dt;
         bl_0 += bl_1*dt;
         br_0 += br_1*dt;
 
-        /*telemetry.addData("X: ", getX());
-        telemetry.addData("Y: ", getY());
-        telemetry.addData("A: ", getA());
-        telemetry.addData("DX: ", x_dot);
-        telemetry.addData("DY: ", y_dot);*/
+//        telemetry.addData("X: ", getX());
+//        telemetry.addData("Y: ", getY());
+//        telemetry.addData("A: ", getA());
+//        telemetry.addData("DX: ", x_dot);
+//        telemetry.addData("DY: ", y_dot);
 
     }
 

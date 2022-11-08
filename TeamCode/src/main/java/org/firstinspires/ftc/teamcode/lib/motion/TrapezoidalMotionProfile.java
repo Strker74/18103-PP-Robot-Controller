@@ -38,6 +38,22 @@ public class TrapezoidalMotionProfile extends Profile {
         }
     }
 
+    public void setTime() {
+        dt = 0.001;
+        t_acc = maxV/maxA;
+        t_cruise = distance/maxV - maxV/maxA;
+
+        if (t_cruise < 0) {
+            maxV = Math.sqrt(distance * maxA);
+            t_acc = maxV / maxA;
+            t_cruise = 0;
+        }
+
+        t_total = 2*t_acc + t_cruise;
+        timesteps = (int) Math.ceil(t_total/dt);
+        timesteps = timesteps + 1;
+    }
+
     @Override
     public void generateProfile() {
         for (int i = 0; i < timesteps; i++) {
@@ -56,7 +72,8 @@ public class TrapezoidalMotionProfile extends Profile {
                 double adjustedTime = timestamp - t_acc - t_cruise;
                 a[i] = -maxA;
                 v[i] = maxV - (maxA * (adjustedTime));
-                p[i] = (t_acc * maxV / 2 + t_cruise * maxV + (2 * maxV - maxA * adjustedTime) * adjustedTime / 2);
+                p[i] = (t_acc * maxV / 2 + t_cruise * maxV + (2 *
+                        maxV - maxA * adjustedTime) * adjustedTime / 2);
                 states[i] = ProfileState.Decelerating;
             } else {
                 a[i] = 0;
@@ -139,23 +156,6 @@ public class TrapezoidalMotionProfile extends Profile {
         }
         maxV *= direction;
         maxA *= direction;
-    }
-
-    public void setTime() {
-        // TODO Replace w/ universal constant
-        dt = 0.001;
-        t_acc = maxV/maxA;
-        t_cruise = distance/maxV - maxV/maxA;
-
-        if (t_cruise < 0) {
-            maxV = Math.sqrt(distance * maxA);
-            t_acc = maxV / maxA;
-            t_cruise = 0;
-        }
-
-        t_total = 2*t_acc + t_cruise;
-        timesteps = (int) Math.ceil(t_total/dt);
-        timesteps = timesteps + 1;
     }
 
     public void setLists() {

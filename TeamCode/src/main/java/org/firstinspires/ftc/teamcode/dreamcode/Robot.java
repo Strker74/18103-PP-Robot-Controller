@@ -4,15 +4,12 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.dreamcode.States.DriveStates.IMU;
-import org.firstinspires.ftc.teamcode.dreamcode.States.DriveStates.MKE;
+import org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators.IMU;
+import org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators.MKE;
 import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.Drive;
-import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.IntakeOuttake;
-import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.Spinner;
 import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.StateEstimator;
 import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.Subsystem;
 
@@ -25,8 +22,8 @@ public class Robot extends OpMode {
     Servo servoTest;
     BNO055IMU imu;
     Drive drive;
-    Spinner spinner;
-    IntakeOuttake io;
+    //Spinner spinner;
+    //IntakeOuttake io;
     StateEstimator estimator;
     ElapsedTime timer;
     public boolean spinnerState = false;
@@ -35,10 +32,10 @@ public class Robot extends OpMode {
     @Override
     public void init() {
         initDrive();
-        initIO();
-        initSpinner();
+        //initIO();
+        //initSpinner();
         initStateEstimator();
-        subsystems = new Subsystem[]{drive, io, spinner, estimator};
+        subsystems = new Subsystem[]{drive, /*io, spinner,*/ estimator};
         timer = new ElapsedTime();
     }
 
@@ -63,6 +60,8 @@ public class Robot extends OpMode {
         bl = hardwareMap.get(DcMotorEx.class, "backLeft");
         br = hardwareMap.get(DcMotorEx.class, "backRight");
 
+        //fr.setDirection(DcMotorEx.Direction.REVERSE);
+        br.setDirection(DcMotorEx.Direction.REVERSE);
         fl.setDirection(DcMotorEx.Direction.REVERSE);
         bl.setDirection(DcMotorEx.Direction.REVERSE);
 
@@ -78,7 +77,7 @@ public class Robot extends OpMode {
         drive = new Drive(fl, fr, bl, br);
     }
 
-    public void initSpinner() {
+    /*public void initSpinner() {
         spin = hardwareMap.get(DcMotorEx.class, "spin");
 
         spin.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -94,7 +93,7 @@ public class Robot extends OpMode {
         intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE); //add per ftc reddit
 
         io = new IntakeOuttake(intake, servoTest);
-    }
+    }*/
 
     public void initStateEstimator() {
         BNO055IMU.Parameters IMUParameters = new BNO055IMU.Parameters();
@@ -119,13 +118,13 @@ public class Robot extends OpMode {
         return drive;
     }
 
-    public Spinner getSpinner() {
+    /*public Spinner getSpinner() {
         return spinner;
     }
 
     public IntakeOuttake getIo() {
         return io;
-    }
+    }*/
 
     public StateEstimator getEstimator() {
         return estimator;

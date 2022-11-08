@@ -2,13 +2,15 @@ package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 import org.firstinspires.ftc.teamcode.dreamcode.Robot;
 import org.firstinspires.ftc.teamcode.lib.control.Path;
 import org.firstinspires.ftc.teamcode.lib.motion.Profile;
 import org.firstinspires.ftc.teamcode.lib.motion.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
-public class AutoTemplate extends Robot {
+public abstract class AutoTemplate extends Robot {
 
     int pathStep = 0;
     Double direction;
@@ -19,15 +21,21 @@ public class AutoTemplate extends Robot {
     Profile py;
     ElapsedTime timer = new ElapsedTime();
     Path path = new Path(this::stopRobot);
+    double tile = Constants.tile;
+
+    public abstract void buildPath();
 
     @Override
     public void init() {
         super.init();
+        buildPath();
     }
 
     @Override
     public void loop() {
+        //telemetry.addData("pathStep", pathStep);
         super.loop();
+        path.run(pathStep);
     }
 
     public void drive(Profile profile, double tolerance) {
@@ -47,7 +55,7 @@ public class AutoTemplate extends Robot {
      * @param tolerance The tolerable error in degrees
      */
     public void turn(double angle, double tolerance) {
-        angle = MathFx.radAngleWrap(Math.toRadians(180 - angle));
+        angle = MathFx.radAngleWrap(Math.toRadians(angle)); // 180 - angle
         tolerance = Math.toRadians(tolerance);
         if (direction == null) {
             direction = MathFx.radAngleWrap(angle - super.getEstimator().getA());
@@ -60,7 +68,7 @@ public class AutoTemplate extends Robot {
     }
 
     public void pointDrive(double x, double y, double a, double tx, double ty, double ta) {
-        a = MathFx.radAngleWrap(Math.toRadians(180 - a));
+        a = MathFx.radAngleWrap(Math.toRadians(a)); // 180 - a
         ta = Math.toRadians(ta);
         if (dx == null) {
             dx = y - super.getEstimator().getX();
@@ -81,10 +89,10 @@ public class AutoTemplate extends Robot {
     }
 
     public void pointDrive(double x, double y, double a) {
-        pointDrive(x, y, a, 1, 1, 0.5);
+        pointDrive(x, y, a, 1, 1, 5);
     }
 
-    public void spin(double pow, double time) {
+    /*public void spin(double pow, double time) {
         if (timer.seconds() < time) {
             super.getSpinner().spin(pow);
         } else {
@@ -92,6 +100,6 @@ public class AutoTemplate extends Robot {
             timer.reset();
             pathStep++;
         }
-    }
+    }*/
 
 }
