@@ -38,6 +38,7 @@ public abstract class AutoTemplate extends Robot {
         path.run(pathStep);
     }
 
+    // Old
     public void drive(Profile profile, double tolerance) {
         if (direction == null) {
             direction = profile.getSetPoint() - super.getEstimator().getX();

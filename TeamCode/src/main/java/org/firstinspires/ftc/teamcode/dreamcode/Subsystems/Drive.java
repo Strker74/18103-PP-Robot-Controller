@@ -111,6 +111,7 @@ public class Drive implements Subsystem {
     }
 
 
+    // Old
     public boolean pathFollower(StateEstimator robot, Profile profile, double tolerance, double time, double direction) {
         double setPoint = profile.getSetPoint();
         if ((setPoint - robot.getX())*direction > tolerance) {
