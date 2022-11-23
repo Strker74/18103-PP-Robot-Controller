@@ -2,15 +2,15 @@ package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
 
 import static java.lang.Thread.sleep;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.dreamcode.States.OCV;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous
+@TeleOp
 public class VisionTest extends OpMode {
 
    OCV vision;
