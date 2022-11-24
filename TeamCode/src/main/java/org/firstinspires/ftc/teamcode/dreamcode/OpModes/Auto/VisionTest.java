@@ -24,6 +24,17 @@ public class VisionTest extends OpMode {
    }
 
    @Override
+   public void init_loop() {
+      super.init_loop();
+      vision.update(0.01, telemetry);
+      try {
+         sleep(50);
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
+   }
+
+   @Override
    public void loop() {
       vision.update(0.01, telemetry);
       try {

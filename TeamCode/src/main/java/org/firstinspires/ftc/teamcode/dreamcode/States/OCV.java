@@ -42,6 +42,7 @@ public class OCV implements State {
     public void update(double dt, Telemetry telemetry) {
         telemetry.addData("Cb: ", pipeline.getCb());
         telemetry.addData("Cr: ", pipeline.getCr());
+        telemetry.addData("Y: ", pipeline.getY());
         telemetry.update();
     }
 
@@ -98,11 +99,14 @@ public class OCV implements State {
          */
         Mat region1_Cb;
         Mat region1_Cr;
+        Mat region1_Y;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
         Mat Cr = new Mat();
+        Mat Y = new Mat();
         int avgCb;
         int avgCr;
+        int aveY;
 
         // Volatile since accessed by OpMode thread w/o synchronization
         private volatile NavPos position = NavPos.LEFT;
@@ -122,6 +126,12 @@ public class OCV implements State {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cr, 1);
         }
+        void inputToY(Mat input)
+        {
+            Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
+            Core.extractChannel(YCrCb, Y, 0);
+        }
+
 
         @Override
         public void init(Mat firstFrame)
@@ -137,6 +147,7 @@ public class OCV implements State {
              */
             inputToCr(firstFrame);
             inputToCb(firstFrame);
+            inputToY(firstFrame);
 
             /*
              * Submats are a persistent reference to a region of the parent
@@ -145,6 +156,7 @@ public class OCV implements State {
              */
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
             region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
+            region1_Y = Y.submat(new Rect(region1_pointA, region1_pointB));
         }
 
         @Override
@@ -190,6 +202,7 @@ public class OCV implements State {
              */
             inputToCr(input);
             inputToCb(input);
+            inputToY(input);
 
             /*
              * Compute the average pixel value of each submat region. We're
@@ -200,6 +213,7 @@ public class OCV implements State {
              */
             avgCr = (int) Core.mean(region1_Cr).val[0];
             avgCb = (int) Core.mean(region1_Cb).val[0];
+            aveY = (int) Core.mean(region1_Y).val[0];
 
             /*
              * Draw a rectangle showing sample region 1 on the screen.
@@ -233,6 +247,7 @@ public class OCV implements State {
 
         public int getCr() {return avgCr;}
         public int getCb() {return avgCb;}
+        public int getY() {return aveY;}
     }
 
 }
