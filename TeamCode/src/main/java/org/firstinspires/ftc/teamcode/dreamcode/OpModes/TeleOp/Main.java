@@ -18,7 +18,7 @@ public class Main extends Robot {
         super.getDrive().POVMecanumDrive(-gamepad1.left_stick_y,
                 gamepad1.left_stick_x, gamepad1.right_stick_x, DriveMode.Optimized);
 
-        super.getIo().runLift(gamepad1.right_stick_y);
+        //super.getIo().runLift(gamepad1.right_stick_y);
 
         if (gamepad1.a) {super.getIo().openClaw();}
         if (gamepad1.b) {super.getIo().closeClaw();}

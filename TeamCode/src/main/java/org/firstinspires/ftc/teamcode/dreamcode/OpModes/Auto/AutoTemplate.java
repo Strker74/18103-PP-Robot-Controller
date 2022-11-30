@@ -93,6 +93,10 @@ public abstract class AutoTemplate extends Robot {
         pointDrive(x, y, a, 1, 1, 5);
     }
 
+    public void tilePointDrive(double x, double y, double a) {
+        pointDrive(x*tile*1.1, y*tile*1.1, a, 1, 1, 5);
+    }
+
     /*public void spin(double pow, double time) {
         if (timer.seconds() < time) {
             super.getSpinner().spin(pow);

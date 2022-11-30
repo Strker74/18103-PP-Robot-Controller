@@ -3,17 +3,22 @@ package org.firstinspires.ftc.teamcode.dreamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators.IMU;
 import org.firstinspires.ftc.teamcode.dreamcode.States.DriveEstimators.MKE;
+import org.firstinspires.ftc.teamcode.dreamcode.States.OCV;
 import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.Drive;
 import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.IO;
 import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.StateEstimator;
 import org.firstinspires.ftc.teamcode.dreamcode.Subsystems.Subsystem;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 public class Robot extends OpMode {
 
@@ -22,6 +27,7 @@ public class Robot extends OpMode {
     DcMotorEx fl, fr, bl, br, lift1, lift2;
     DcMotorEx[] driveMotors;
     Servo leftClaw, rightClaw;
+    OpenCvWebcam webcam;
     BNO055IMU imu;
     Drive drive;
     //Spinner spinner;
@@ -39,6 +45,15 @@ public class Robot extends OpMode {
         initStateEstimator();
         subsystems = new Subsystem[]{drive, io,/* spinner,*/ estimator};
         timer = new ElapsedTime();
+    }
+
+    @Override
+    public void init_loop() {
+        super.init_loop();
+        dt = timer.seconds();
+        timer.reset();
+        getEstimator().update(getDt(), telemetry);
+        telemetry.update();
     }
 
     @Override
@@ -63,7 +78,7 @@ public class Robot extends OpMode {
         br = hardwareMap.get(DcMotorEx.class, "backRight");
 
         //fr.setDirection(DcMotorEx.Direction.REVERSE);
-        br.setDirection(DcMotorEx.Direction.REVERSE);
+        //br.setDirection(DcMotorEx.Direction.REVERSE);
         fl.setDirection(DcMotorEx.Direction.REVERSE);
         bl.setDirection(DcMotorEx.Direction.REVERSE);
 
@@ -96,6 +111,7 @@ public class Robot extends OpMode {
         //intake.setDirection(DcMotorSimple.Direction.REVERSE);
         lift1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         lift2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        lift1.setDirection(DcMotorSimple.Direction.REVERSE);
         lift2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         io = new IO(lift1, lift2, leftClaw, rightClaw);
@@ -113,7 +129,10 @@ public class Robot extends OpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(IMUParameters);
 
-        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br));
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br), new OCV(webcam), true);
     }
 
     public double getDt() {
@@ -123,10 +142,6 @@ public class Robot extends OpMode {
     public Drive getDrive() {
         return drive;
     }
-
-    /*public Spinner getSpinner() {
-        return spinner;
-    }*/
 
     public IO getIo() {
         return io;

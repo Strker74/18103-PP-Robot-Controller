@@ -7,8 +7,8 @@ public class PointDriveTest extends AutoTemplate {
 
     @Override
     public void buildPath() {
-        path.add(() -> pointDrive(0, -1*tile, 270));
-        path.add(() -> pointDrive(0, -2*tile, 270));
+        path.add(() -> tilePointDrive(0, 2, 90));
+        path.add(() -> tilePointDrive(2, 2, 90));
     }
 
 }

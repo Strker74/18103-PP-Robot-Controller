@@ -21,6 +21,7 @@
 
 package org.firstinspires.ftc.teamcode.lib.vision.OpenCVSamples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -46,6 +47,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
  * sort of manual control over sensor parameters such as exposure,
  * gain, ISO, or frame rate.
  */
+@Disabled
 @TeleOp
 public class OpenCvAndVuforiaOnSameCameraExample extends LinearOpMode
 {

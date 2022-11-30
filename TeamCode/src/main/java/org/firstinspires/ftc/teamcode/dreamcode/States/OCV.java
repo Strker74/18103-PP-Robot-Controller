@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.dreamcode.States;
 
+import static java.lang.Thread.sleep;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -38,12 +40,28 @@ public class OCV implements State {
 
     }
 
+    public int getCb() {
+        return pipeline.getCb();
+    }
+
+    public int getCr() {
+        return pipeline.getCr();
+    }
+
+    public int getY() {
+        return pipeline.getY();
+    }
+
     @Override
     public void update(double dt, Telemetry telemetry) {
-        telemetry.addData("Cb: ", pipeline.getCb());
-        telemetry.addData("Cr: ", pipeline.getCr());
-        telemetry.addData("Y: ", pipeline.getY());
-        telemetry.update();
+        /*telemetry.addData("Vision Cb: ", pipeline.getCb());
+        telemetry.addData("Vision Cr: ", pipeline.getCr());
+        telemetry.addData("Vision Y: ", pipeline.getY());
+        try {
+            sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public static class NavigationPipeline extends OpenCvPipeline
