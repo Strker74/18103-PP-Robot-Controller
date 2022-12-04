@@ -7,8 +7,10 @@ import org.firstinspires.ftc.teamcode.dreamcode.States.DriveMode;
 
 @TeleOp
 public class Main extends Robot {
+
     @Override
     public void init() {
+
         super.init();
     }
 
@@ -18,11 +20,11 @@ public class Main extends Robot {
         super.getDrive().POVMecanumDrive(-gamepad1.left_stick_y,
                 gamepad1.left_stick_x, gamepad1.right_stick_x, DriveMode.Optimized);
 
-        super.getIo().runLift(gamepad1.right_trigger - gamepad1.left_trigger);
-
         if (gamepad1.a) {super.getIo().openClaw();}
         if (gamepad1.b) {super.getIo().closeClaw();}
-        if (gamepad1.x) {super.getIo().PIDTickLift(630, 10);}
+        if (gamepad1.x) {super.getIo().setLiftMid();}
+
+        super.getIo().PosAdjustLift(gamepad1.right_trigger - gamepad1.left_trigger);
 
     }
 }

@@ -11,7 +11,7 @@ public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
-    double kp = 1/Motors.GoBILDA_312.getTicksPerRev(), kv = 1/ Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0;
+    double kp = 1/Motors.GoBILDA_312.getTicksPerRev(), kv = 1/ Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0, liftPos = 0;
 
     public IO(DcMotorEx liftLeft, DcMotorEx liftRight, Servo left, Servo right) {
         this.liftLeft = liftLeft;
@@ -23,8 +23,7 @@ public class IO implements Subsystem {
     public boolean PIDLift(Profile p, double ty) {
         double e = (p.getSetPoint() - getLiftPos());
         if (Math.abs(e) > ty) {
-            double u = kp * e;
-            runLift(u);
+            runLift(kp * e);
             return false;
         } else {
             stop();
@@ -35,11 +34,9 @@ public class IO implements Subsystem {
     public boolean PIDTickLift(double ticks, double ty) {
         double e = (ticks - getLiftTickPos());
         if (Math.abs(e) > ty) {
-            double u = kp * e;
-            runLift(u);
+            runLift(kp * e);
             return false;
         } else {
-            stop();
             return true;
         }
     }
@@ -51,6 +48,10 @@ public class IO implements Subsystem {
 
     public double getLiftTickPos() {
         return liftRight.getCurrentPosition();
+    }
+
+    public void PosAdjustLift(double pos) {
+        liftPos += pos*Motors.GoBILDA_312.getTicksPerRev()/50;
     }
 
     public void runLift(double power) {
@@ -72,10 +73,15 @@ public class IO implements Subsystem {
         right.setPosition(0);
     }
 
+    public void setLiftMid() {
+        liftPos = 670;
+    }
+
 
     @Override
     public void update(double dt, Telemetry telemetry) {
         telemetry.addData("Lift Encoder Position", getLiftTickPos());
+        PIDTickLift(liftPos,10);
     }
 
     @Override
