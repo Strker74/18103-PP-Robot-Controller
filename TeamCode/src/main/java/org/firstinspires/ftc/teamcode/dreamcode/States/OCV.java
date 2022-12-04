@@ -52,6 +52,22 @@ public class OCV implements State {
         return pipeline.getY();
     }
 
+    public int getCrCbDiff() {
+        int d = pipeline.getCb()- pipeline.getCr();
+        if(d < -25) return -1;
+        if(d > 25) return 1;
+        return 0;
+    }
+
+    public String getParkPosition(){
+        switch(getCrCbDiff()){
+            case -1: return "left";
+            case 1: return "right";
+            case 0: return "center";
+            default: return "Nothing and therefore left";
+        }
+    }
+
     @Override
     public void update(double dt, Telemetry telemetry) {
         /*telemetry.addData("Vision Cb: ", pipeline.getCb());
@@ -85,8 +101,8 @@ public class OCV implements State {
          * The core values which define the location and size of the sample regions
          */
         static final Point TOPLEFT_ANCHOR_POINT = new Point(0,0);
-        static final int REGION_WIDTH = 100;
-        static final int REGION_HEIGHT = 100;
+        static final int REGION_WIDTH = 200;
+        static final int REGION_HEIGHT = 500;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values
