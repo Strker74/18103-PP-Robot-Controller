@@ -30,11 +30,9 @@ public class Robot extends OpMode {
     OpenCvWebcam webcam;
     BNO055IMU imu;
     Drive drive;
-    //Spinner spinner;
     IO io;
     StateEstimator estimator;
     ElapsedTime timer;
-    public boolean spinnerState = false;
     double dt;
 
     @Override
@@ -132,7 +130,7 @@ public class Robot extends OpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br), new OCV(webcam), false);
+        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br), new OCV(webcam), true);
     }
 
     public double getDt() {

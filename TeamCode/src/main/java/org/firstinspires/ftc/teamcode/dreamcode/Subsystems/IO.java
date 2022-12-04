@@ -11,7 +11,7 @@ public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
-    double kp = 1/Motors.GoBILDA_435.getTicksPerRev(), kv = 1/ Motors.GoBILDA_435.getSurfaceVelocity(2), ka = 0;
+    double kp = 1/Motors.GoBILDA_312.getTicksPerRev(), kv = 1/ Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0;
 
     public IO(DcMotorEx liftLeft, DcMotorEx liftRight, Servo left, Servo right) {
         this.liftLeft = liftLeft;
@@ -46,7 +46,7 @@ public class IO implements Subsystem {
 
     public double getLiftPos() {
         return liftRight.getCurrentPosition()*
-                Motors.GoBILDA_435.getDistPerTicks(1);
+                Motors.GoBILDA_312.getDistPerTicks(1);
     }
 
     public double getLiftTickPos() {
@@ -82,5 +82,7 @@ public class IO implements Subsystem {
     public void stop() {
         runLift(0);
     }
+
+    // 630 (Mid Goal)
 
 }

@@ -22,6 +22,7 @@ public class Main extends Robot {
 
         if (gamepad1.a) {super.getIo().openClaw();}
         if (gamepad1.b) {super.getIo().closeClaw();}
+        if (gamepad1.x) {super.getIo().PIDTickLift(630, 10);}
 
     }
 }
