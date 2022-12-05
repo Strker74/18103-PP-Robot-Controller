@@ -11,7 +11,7 @@ public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
-    double kp = 1/Motors.GoBILDA_312.getTicksPerRev(), kv = 1/ Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0, liftPos = 0;
+    double kp = 0.008, kpd = 0.008, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0, ks = 0.13, ksd = 0.3, liftPos = 0;
 
     public IO(DcMotorEx liftLeft, DcMotorEx liftRight, Servo left, Servo right) {
         this.liftLeft = liftLeft;
@@ -33,25 +33,34 @@ public class IO implements Subsystem {
 
     public boolean PIDTickLift(double ticks, double ty) {
         double e = (ticks - getLiftTickPos());
-        if (Math.abs(e) > ty) {
-            runLift(kp * e);
-            return false;
+        if (e >=  0) {
+            if (Math.abs(e) > ty) {
+                runLift(kp * e + ks);
+                return false;
+            } else {
+                return true;
+            }
         } else {
-            return true;
+            if (Math.abs(e) > ty) {
+                runLift(kpd * e + ksd);
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
     public double getLiftPos() {
-        return liftRight.getCurrentPosition()*
+        return getLiftTickPos()*
                 Motors.GoBILDA_312.getDistPerTicks(1);
     }
 
     public double getLiftTickPos() {
-        return liftRight.getCurrentPosition();
+        return liftLeft.getCurrentPosition();
     }
 
     public void PosAdjustLift(double pos) {
-        liftPos += pos*Motors.GoBILDA_312.getTicksPerRev()/50;
+        liftPos += pos*Motors.GoBILDA_312.getTicksPerRev()/25;
     }
 
     public void runLift(double power) {
@@ -73,14 +82,26 @@ public class IO implements Subsystem {
         right.setPosition(0);
     }
 
-    public void setLiftMid() {
-        liftPos = 670;
+    public void setLiftMid() {liftPos = 600;}
+
+    public void setLiftHigh() {liftPos = 900;}
+
+    public void setLiftLow() {liftPos = 300;}
+
+    public void setLiftDown() {
+        liftPos = 0;
+    }
+
+    public double getTargetLiftPos() {
+        return liftPos;
     }
 
 
     @Override
     public void update(double dt, Telemetry telemetry) {
+        telemetry.addData("Lift Target Position", getTargetLiftPos());
         telemetry.addData("Lift Encoder Position", getLiftTickPos());
+        telemetry.addData("Lift Error", getTargetLiftPos() - getLiftTickPos());
         PIDTickLift(liftPos,10);
     }
 

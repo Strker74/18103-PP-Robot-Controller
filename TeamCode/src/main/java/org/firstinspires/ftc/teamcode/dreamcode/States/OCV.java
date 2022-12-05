@@ -29,7 +29,7 @@ public class OCV implements State {
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+                //webcam.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -52,21 +52,9 @@ public class OCV implements State {
         return pipeline.getY();
     }
 
-    public int getCrCbDiff() {
-        int d = pipeline.getCb()- pipeline.getCr();
-        if(d < -25) return -1;
-        if(d > 25) return 1;
-        return 0;
-    }
+    public int getDiff() {return getCb() - getCr();}
 
-    public String getParkPosition(){
-        switch(getCrCbDiff()){
-            case -1: return "left";
-            case 1: return "right";
-            case 0: return "center";
-            default: return "Nothing and therefore left";
-        }
-    }
+    public NavigationPipeline.NavPos getAnalysis() {return pipeline.getAnalysis();}
 
     @Override
     public void update(double dt, Telemetry telemetry) {
@@ -84,9 +72,26 @@ public class OCV implements State {
     {
         public enum NavPos
         {
-            LEFT,
-            CENTER,
-            RIGHT
+            LEFT(0, "Left"),
+            CENTER(1, "Center"),
+            RIGHT(2, "Right");
+
+            private final double i;
+            private final String name;
+
+            NavPos(double i, String name) {
+                this.i = i;
+                this.name = name;
+            }
+
+            public double getI() {
+                return i;
+            }
+
+            public String getName() {
+                return name;
+            }
+
         }
 
         /*
@@ -95,14 +100,15 @@ public class OCV implements State {
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
         static final Scalar RED = new Scalar(255, 0, 0);
+        static final Scalar BLACK = new Scalar(0, 0, 0);
 
 
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point TOPLEFT_ANCHOR_POINT = new Point(0,0);
-        static final int REGION_WIDTH = 200;
-        static final int REGION_HEIGHT = 500;
+        static final Point TOPLEFT_ANCHOR_POINT = new Point(125,125);
+        static final int REGION_WIDTH = 50;
+        static final int REGION_HEIGHT = 50;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values
@@ -253,16 +259,22 @@ public class OCV implements State {
              * Draw a rectangle showing sample region 1 on the screen.
              * Simply a visual aid. Serves no functional purpose.
              */
-            Imgproc.rectangle(
-                    input, // Buffer to draw on
-                    region1_pointA, // First point which defines the rectangle
-                    region1_pointB, // Second point which defines the rectangle
-                    RED, // The color the rectangle is drawn in
-                    2); // Thickness of the rectangle lines
+//            Imgproc.rectangle(
+//                    input, // Buffer to draw on
+//                    region1_pointA, // First point which defines the rectangle
+//                    region1_pointB, // Second point which defines the rectangle
+//                    RED, // The color the rectangle is drawn in
+//                    2); // Thickness of the rectangle lines
             /*
-             * Find the max of the 3 averages
+             * Find the difference between the Cr and Cb values
              */
 
+            switch(getCrCbDiff()) {
+                case -1: position = NavPos.LEFT; Imgproc.rectangle(input, region1_pointA, region1_pointB, RED, 2); break;
+                case 1: position = NavPos.RIGHT; Imgproc.rectangle(input, region1_pointA, region1_pointB, BLUE, 2); break;
+                case 0: position = NavPos.CENTER; Imgproc.rectangle(input, region1_pointA, region1_pointB, BLACK, 2); break;
+                default: position = NavPos.LEFT; Imgproc.rectangle(input, region1_pointA, region1_pointB, GREEN, 2); break;
+            }
             /*
              * Render the 'input' buffer to the viewport. But note this is not
              * simply rendering the raw camera feed, because we called functions
@@ -282,6 +294,24 @@ public class OCV implements State {
         public int getCr() {return avgCr;}
         public int getCb() {return avgCb;}
         public int getY() {return aveY;}
+
+        public int getCrCbDiff() {
+            int d = getCb()- getCr();
+            if(d < -15) return -1;
+            if(d > 15) return 1;
+            return 0;
+        }
+
+        public String getParkPosition(){
+            switch(getCrCbDiff()){
+                case -1: return "left";
+                case 1: return "right";
+                case 0: return "center";
+                default: return "Nothing and therefore left";
+            }
+        }
+
+
     }
 
 }

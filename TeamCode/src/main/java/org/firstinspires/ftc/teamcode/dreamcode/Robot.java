@@ -130,7 +130,7 @@ public class Robot extends OpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br), new OCV(webcam), true);
+        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br), new OCV(webcam), false);
     }
 
     public double getDt() {
