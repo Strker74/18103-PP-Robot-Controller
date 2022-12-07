@@ -52,12 +52,11 @@ public class StateEstimator implements Subsystem, State {
     public void update(double dt, Telemetry telemetry) {
         if (scanning) {
             vision.update(dt, telemetry);
-            telemetry.addData("Vision Cb: ", vision.getCb());
-            telemetry.addData("Vision Cr: ", vision.getCr());
-            telemetry.addData("Vision Y: ", vision.getY());
-            telemetry.addData("Park Position:", vision.getCrCbDiff());
-            telemetry.addData("Park Position:", vision.getParkPosition());
-
+            //telemetry.addData("Vision Cb: ", vision.getCb());
+            //telemetry.addData("Vision Cr: ", vision.getCr());
+            //telemetry.addData("Vision Y: ", vision.getY());
+            telemetry.addData("Cb-Cr:", vision.getDiff());
+            telemetry.addData("Park Position:", vision.getAnalysis().getName());
             try {
                 sleep(50);
             } catch (InterruptedException e) {

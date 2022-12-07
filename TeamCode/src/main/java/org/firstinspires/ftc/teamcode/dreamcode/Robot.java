@@ -30,11 +30,9 @@ public class Robot extends OpMode {
     OpenCvWebcam webcam;
     BNO055IMU imu;
     Drive drive;
-    //Spinner spinner;
     IO io;
     StateEstimator estimator;
     ElapsedTime timer;
-    public boolean spinnerState = false;
     double dt;
 
     @Override
