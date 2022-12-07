@@ -11,7 +11,7 @@ public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
-    double kp = 0.008, kpd = 0.008, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0, ks = 0.13, ksd = 0.3, liftPos = 0;
+    double kp = 0.0075, kpd = 0.008, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0, ks = 0.13, ksd = 0.3, liftPos = 0;
 
     public IO(DcMotorEx liftLeft, DcMotorEx liftRight, Servo left, Servo right) {
         this.liftLeft = liftLeft;
@@ -33,20 +33,11 @@ public class IO implements Subsystem {
 
     public boolean PIDTickLift(double ticks, double ty) {
         double e = (ticks - getLiftTickPos());
-        if (e >=  0) {
-            if (Math.abs(e) > ty) {
-                runLift(kp * e + ks);
-                return false;
-            } else {
-                return true;
-            }
+        if (Math.abs(e) > ty) {
+            runLift(kp * e /*+ ks*/);
+            return false;
         } else {
-            if (Math.abs(e) > ty) {
-                runLift(kpd * e + ksd);
-                return false;
-            } else {
-                return true;
-            }
+            return true;
         }
     }
 
@@ -87,6 +78,10 @@ public class IO implements Subsystem {
     public void setLiftHigh() {liftPos = 900;}
 
     public void setLiftLow() {liftPos = 300;}
+
+    public void raiseLift() {liftPos += 100;}
+
+    public void dropLift() {liftPos -= 100;}
 
     public void setLiftDown() {
         liftPos = 0;
