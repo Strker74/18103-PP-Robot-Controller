@@ -55,8 +55,8 @@ public class StateEstimator implements Subsystem, State {
             telemetry.addData("Vision Cb: ", vision.getCb());
             telemetry.addData("Vision Cr: ", vision.getCr());
             telemetry.addData("Vision Y: ", vision.getY());
-            telemetry.addData("Park Position:", vision.getCrCbDiff());
-            telemetry.addData("Park Position:", vision.getParkPosition());
+            telemetry.addData("Park Position:", vision.getDiff());
+            telemetry.addData("Park Position:", vision.getAnalysis().getName());
 
             try {
                 sleep(50);

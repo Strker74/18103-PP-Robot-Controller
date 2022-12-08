@@ -13,7 +13,7 @@ public class BlueTerminalRedSide extends AutoTemplate {
         path.add(() -> tilePointDrive(-.25, 1, -90));
         super.getIo().openClaw();
         path.add(() -> tilePointDrive(1.3, 1, 0));
-        for(int step = 1; step <= 3; step++) {
+        /*for(int step = 1; step <= 3; step++) {
             path.add(() -> tilePointDrive(1.3, 2.5, 0));
             super.getIo().raiseLift(5-step);
             super.getIo().closeClaw();
@@ -21,16 +21,13 @@ public class BlueTerminalRedSide extends AutoTemplate {
             path.add(() -> tilePointDrive(.75, 1.75, -90));
             super.getIo().setLiftLow();
             super.getIo().openClaw();
-        }
-        double park = 1.25;
+        }*/
         switch(visionAnalysis){
-            case 0: park -= 0;break;
-            case 1: park -= 1;break;
-            case 2: park -= 2;break;
+            case 0: path.add(() -> tilePointDrive(1.25, 1.25, -90)); break;
+            case 1: path.add(() -> tilePointDrive(-1+1.25, 1.25, -90)); break;
+            case 2: path.add(() -> tilePointDrive(-2+1.25, 1.25, -90)); break;
             //default: park -= .5; break;
         }
-        double x = park;
-        path.add(() -> tilePointDrive(x, 1.25, -90));
     }
 
 }
