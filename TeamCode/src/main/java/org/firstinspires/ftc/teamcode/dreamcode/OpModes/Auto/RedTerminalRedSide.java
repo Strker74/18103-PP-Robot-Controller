@@ -7,12 +7,17 @@ public class RedTerminalRedSide extends AutoTemplate {
 
    @Override
    public void buildPath() {
-      setStartA(90);
-      path.add(() -> tilePointDrive(0, 1, 0));
-      path.add(() -> tilePointDrive(0, 0, 90));
-      path.add(() -> tilePointDrive(1.5,0 , 90));
-      path.add(() -> getIo().setLiftHigh());
-      //path.add(() -> tilePointDrive(2, 2, 90));
+      setStartA(0);
+      path.add(this::closeClaw);
+      path.add(() -> tilePointDrive(0, 1.25, 0));
+      path.add(this::openClaw);
+      //path.add(this::setLiftLow);
+      path.add(() -> tilePointDrive(2.25, 1.25, 90));
+      path.add(() -> tilePointDrive(2.25, 1.25, 180));
+      if (getVisionAnalysis() == 1) {
+         path.add(() -> tilePointDrive(1.75, 0, 180));
+      } else if (getVisionAnalysis() == 2) {
+         path.add(() -> tilePointDrive(1.75, -1.25, 180));
+      }
    }
-
 }
