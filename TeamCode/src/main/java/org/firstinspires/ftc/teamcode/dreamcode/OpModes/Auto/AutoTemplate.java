@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 import org.firstinspires.ftc.teamcode.dreamcode.Robot;
 import org.firstinspires.ftc.teamcode.lib.control.Path;
@@ -22,12 +21,27 @@ public abstract class AutoTemplate extends Robot {
     ElapsedTime timer = new ElapsedTime();
     Path path = new Path(this::stopRobot);
     double tile = Constants.tile, startA = 0;
+    int visionAnalysis = 0;
+    boolean increment = false;
+
 
     public abstract void buildPath();
 
     @Override
     public void init() {
+        setScanning(true);
         super.init();
+    }
+
+    @Override
+    public void init_loop() {
+        super.init_loop();
+        visionAnalysis = updateVisionAnalysis();
+    }
+
+    @Override
+    public void start() {
+        visionAnalysis = updateVisionAnalysis();
         buildPath();
     }
 
@@ -39,6 +53,7 @@ public abstract class AutoTemplate extends Robot {
     }
 
     // Old
+    @Deprecated
     public void drive(Profile profile, double tolerance) {
         if (direction == null) {
             direction = profile.getSetPoint() - super.getEstimator().getX();
@@ -55,6 +70,7 @@ public abstract class AutoTemplate extends Robot {
      * @param angle The desired angle in degrees
      * @param tolerance The tolerable error in degrees
      */
+    @Deprecated
     public void turn(double angle, double tolerance) {
         angle = MathFx.radAngleWrap(Math.toRadians(angle)); // 180 - angle
         tolerance = Math.toRadians(tolerance);
@@ -99,6 +115,53 @@ public abstract class AutoTemplate extends Robot {
 
     public void setStartA(double startA) {
         this.startA = startA;
+    }
+
+    public void lift(double pos, double ta) {
+        if (super.getIo().getTargetLiftPos() != pos) {
+            super.getIo().setLiftPos(pos);
+        } else if (super.getIo().IsOff()) {
+            pathStep++;
+            timer.reset();
+        }
+    }
+
+    public void lift(double pos) {
+        lift(pos, 10);
+    }
+
+    public void liftIncrement(double adjustment) {
+        if (!increment) {
+            getIo().AutoPosAdjustLift(adjustment);
+            increment = true;
+        }
+        if (super.getIo().IsOff()) {
+            increment = false;
+            pathStep++;
+            timer.reset();
+        }
+    }
+
+    public void setLiftLow() {lift(Constants.LOW_GOAL);}
+    public void setLiftMid() {lift(Constants.MID_GOAL);}
+    public void setLiftHigh() {lift(Constants.HIGH_GOAL);}
+
+    public void closeClaw() {
+        super.getIo().closeClaw();
+        pathStep++;
+    }
+
+    public void openClaw() {
+        super.getIo().openClaw();
+        pathStep++;
+    }
+
+    public int updateVisionAnalysis() {
+        return getEstimator().getVisionAnalysis();
+    }
+
+    public int getVisionAnalysis() {
+        return visionAnalysis;
     }
 
     /*public void spin(double pow, double time) {

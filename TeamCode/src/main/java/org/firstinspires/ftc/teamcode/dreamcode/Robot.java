@@ -34,6 +34,7 @@ public class Robot extends OpMode {
     StateEstimator estimator;
     ElapsedTime timer;
     double dt;
+    boolean scanning = false;
 
     @Override
     public void init() {
@@ -135,7 +136,7 @@ public class Robot extends OpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br), new OCV(webcam), false);
+        estimator = new StateEstimator(new IMU(imu), new MKE(fl, fr, bl, br), new OCV(webcam), scanning);
     }
 
     public double getDt() {
@@ -160,6 +161,7 @@ public class Robot extends OpMode {
         }
     }
 
-
-
+    public void setScanning(boolean scanning) {
+        this.scanning = scanning;
+    }
 }

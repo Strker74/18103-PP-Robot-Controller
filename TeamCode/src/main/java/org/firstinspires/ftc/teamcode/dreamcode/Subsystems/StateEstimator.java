@@ -119,4 +119,8 @@ public class StateEstimator implements Subsystem, State {
         return sdot;
     }
 
+    public int getVisionAnalysis() {
+        return vision.getAnalysis().getI();
+    }
+
 }
