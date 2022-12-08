@@ -6,12 +6,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.drivers.Motors;
 import org.firstinspires.ftc.teamcode.lib.motion.Profile;
+import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
 public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
-    double kp = 0.008, kpd = 0.008, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2), ka = 0, ks = 0.13, ksd = 0.3, liftPos = 0;
+    double kpu = 0.0075, kpd = 0.005, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
+            ka = 0, ks = 0.13, ksd = 0.65, liftPos = 0, liftPow = 0, bias = 0;
 
     public IO(DcMotorEx liftLeft, DcMotorEx liftRight, Servo left, Servo right) {
         this.liftLeft = liftLeft;
@@ -20,10 +22,11 @@ public class IO implements Subsystem {
         this.right = right;
     }
 
+    @Deprecated
     public boolean PIDLift(Profile p, double ty) {
         double e = (p.getSetPoint() - getLiftPos());
         if (Math.abs(e) > ty) {
-            runLift(kp * e);
+            runLift(kpu * e);
             return false;
         } else {
             stop();
@@ -33,16 +36,16 @@ public class IO implements Subsystem {
 
     public boolean PIDTickLift(double ticks, double ty) {
         double e = (ticks - getLiftTickPos());
-        if (e >=  0) {
+        if (e >= 0) {
             if (Math.abs(e) > ty) {
-                runLift(kp * e + ks);
+                runLift(kpu * e /*+ ks*/);
                 return false;
             } else {
                 return true;
             }
         } else {
             if (Math.abs(e) > ty) {
-                runLift(kpd * e + ksd);
+                runLift(MathFx.scale(-0.15,1,kpd * e + ksd));
                 return false;
             } else {
                 return true;
@@ -50,25 +53,28 @@ public class IO implements Subsystem {
         }
     }
 
+    @Deprecated
     public double getLiftPos() {
         return getLiftTickPos()*
                 Motors.GoBILDA_312.getDistPerTicks(1);
     }
 
     public double getLiftTickPos() {
-        return liftLeft.getCurrentPosition();
+        return liftLeft.getCurrentPosition() + bias;
     }
 
     public void PosAdjustLift(double pos) {
         liftPos += pos*Motors.GoBILDA_312.getTicksPerRev()/25;
+        liftPos = MathFx.scale(0, 1400, liftPos);
     }
 
     public void runLift(double power) {
         if (getLiftTickPos() <= 0 && power < 0) {
-            stop();
+            stop(); liftPow = 0;
         } else {
             liftLeft.setPower(power);
             liftRight.setPower(power);
+            liftPow = power;
         }
     }
 
@@ -88,6 +94,10 @@ public class IO implements Subsystem {
 
     public void setLiftLow() {liftPos = 300;}
 
+    public void raiseLift() {liftPos += 100;}
+
+    public void dropLift() {liftPos -= 100;}
+
     public void setLiftDown() {
         liftPos = 0;
     }
@@ -96,9 +106,14 @@ public class IO implements Subsystem {
         return liftPos;
     }
 
+    public void resetLift() {
+        bias -= getLiftTickPos();
+    }
+
 
     @Override
     public void update(double dt, Telemetry telemetry) {
+        telemetry.addData("Lift Power", liftPow);
         telemetry.addData("Lift Target Position", getTargetLiftPos());
         telemetry.addData("Lift Encoder Position", getLiftTickPos());
         telemetry.addData("Lift Error", getTargetLiftPos() - getLiftTickPos());
@@ -109,7 +124,5 @@ public class IO implements Subsystem {
     public void stop() {
         runLift(0);
     }
-
-    // 630 (Mid Goal)
 
 }

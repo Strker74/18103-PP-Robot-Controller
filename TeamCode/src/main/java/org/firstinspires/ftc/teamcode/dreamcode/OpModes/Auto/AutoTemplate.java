@@ -21,7 +21,7 @@ public abstract class AutoTemplate extends Robot {
     Profile py;
     ElapsedTime timer = new ElapsedTime();
     Path path = new Path(this::stopRobot);
-    double tile = Constants.tile;
+    double tile = Constants.tile, startA = 0;
 
     public abstract void buildPath();
 
@@ -69,7 +69,7 @@ public abstract class AutoTemplate extends Robot {
     }
 
     public void pointDrive(double x, double y, double a, double tx, double ty, double ta) {
-        a = MathFx.radAngleWrap(Math.toRadians(a)); // 180 - a
+        a = MathFx.radAngleWrap(Math.toRadians(a + startA)); // 180 - a
         ta = Math.toRadians(ta);
         if (dx == null) {
             dx = y - super.getEstimator().getX();
@@ -94,7 +94,11 @@ public abstract class AutoTemplate extends Robot {
     }
 
     public void tilePointDrive(double x, double y, double a) {
-        pointDrive(x*tile*1.1, y*tile*1.1, a, 1, 1, 5);
+        pointDrive(x*tile*1.1, y*tile*1.1, a);
+    }
+
+    public void setStartA(double startA) {
+        this.startA = startA;
     }
 
     /*public void spin(double pow, double time) {

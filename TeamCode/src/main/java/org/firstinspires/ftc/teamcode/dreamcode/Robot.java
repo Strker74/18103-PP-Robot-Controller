@@ -112,6 +112,11 @@ public class Robot extends OpMode {
         lift1.setDirection(DcMotorSimple.Direction.REVERSE);
         lift2.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        lift1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        lift1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        lift2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        lift2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
         io = new IO(lift1, lift2, leftClaw, rightClaw);
     }
 
