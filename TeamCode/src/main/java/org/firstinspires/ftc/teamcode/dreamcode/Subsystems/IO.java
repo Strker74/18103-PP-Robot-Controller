@@ -91,6 +91,14 @@ public class IO implements Subsystem {
 
     public void setLiftMid() {liftPos = 600;}
 
+    public void raiseLift() {liftPos+=10;}
+
+    public void lowerLift() {if(liftPos > 100){liftPos-=10;}}
+
+    public void raiseLift(int i) {liftPos+=(10*i);}
+
+    public void lowerLift(int i) {if(liftPos > 100){liftPos-=(10*i);}}
+
     public void setLiftHigh() {liftPos = 900;}
 
     public void setLiftLow() {liftPos = 300;}
@@ -99,9 +107,9 @@ public class IO implements Subsystem {
         PosAdjustLift(pos * 25/Motors.GoBILDA_312.getTicksPerRev());
     }
 
-    public void raiseLift() {liftPos += 100;}
+    public void raiseLift100() {liftPos += 100;}
 
-    public void dropLift() {liftPos -= 100;}
+    public void dropLift100() {liftPos -= 100;}
 
     public void setLiftDown() {
         liftPos = 0;

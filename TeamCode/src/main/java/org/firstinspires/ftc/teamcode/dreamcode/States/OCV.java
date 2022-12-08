@@ -76,15 +76,15 @@ public class OCV implements State {
             CENTER(1, "Center"),
             RIGHT(2, "Right");
 
-            private final int i;
+            private final double i;
             private final String name;
 
-            NavPos(int i, String name) {
+            NavPos(double i, String name) {
                 this.i = i;
                 this.name = name;
             }
 
-            public int getI() {
+            public double getI() {
                 return i;
             }
 
