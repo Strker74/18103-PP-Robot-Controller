@@ -14,6 +14,7 @@ public class IO implements Subsystem {
     Servo left, right;
     double kpu = 0.0075, kpd = 0.005, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
             ka = 0, ks = 0.13, ksd = 0.65, liftPos = 0, liftPow = 0, bias = 0;
+    boolean isOff = true;
 
     public IO(DcMotorEx liftLeft, DcMotorEx liftRight, Servo left, Servo right) {
         this.liftLeft = liftLeft;
@@ -94,6 +95,10 @@ public class IO implements Subsystem {
 
     public void setLiftLow() {liftPos = 300;}
 
+    public void AutoPosAdjustLift(double pos) {
+        PosAdjustLift(pos * 25/Motors.GoBILDA_312.getTicksPerRev());
+    }
+
     public void raiseLift() {liftPos += 100;}
 
     public void dropLift() {liftPos -= 100;}
@@ -110,6 +115,13 @@ public class IO implements Subsystem {
         bias -= getLiftTickPos();
     }
 
+    public void setLiftPos(double liftPos) {
+        this.liftPos = liftPos;
+    }
+
+    public boolean IsOff() {
+        return isOff;
+    }
 
     @Override
     public void update(double dt, Telemetry telemetry) {
@@ -117,7 +129,7 @@ public class IO implements Subsystem {
         telemetry.addData("Lift Target Position", getTargetLiftPos());
         telemetry.addData("Lift Encoder Position", getLiftTickPos());
         telemetry.addData("Lift Error", getTargetLiftPos() - getLiftTickPos());
-        PIDTickLift(liftPos,10);
+        isOff = PIDTickLift(liftPos,10);
     }
 
     @Override
