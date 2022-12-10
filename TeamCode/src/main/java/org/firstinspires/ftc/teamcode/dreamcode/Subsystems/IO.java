@@ -12,6 +12,11 @@ public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
+    final double LIFTPOSMIN = -100, LIFTPOSMAX = 950;
+    double fixLift = .0055;
+    final double kpuHold = 0.0075, kpdHold = 0.005,
+            kvHold = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
+            kaHold = 0, ksHold = 0.13, ksdHold = 0.65, liftPosHold = 0, liftPowHold = 0, biasHold = 0;
     double kpu = 0.0075, kpd = 0.005, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
             ka = 0, ks = 0.13, ksd = 0.65, liftPos = 0, liftPow = 0, bias = 0;
     boolean isOff = true;
@@ -66,11 +71,11 @@ public class IO implements Subsystem {
 
     public void PosAdjustLift(double pos) {
         liftPos += pos*Motors.GoBILDA_312.getTicksPerRev()/25;
-        liftPos = MathFx.scale(0, 1400, liftPos);
+        liftPos = MathFx.scale(LIFTPOSMIN, LIFTPOSMAX, liftPos);
     }
 
     public void runLift(double power) {
-        if (getLiftTickPos() <= 0 && power < 0) {
+        if (getLiftTickPos() <= -100 && power < 0) {
             stop(); liftPow = 0;
         } else {
             liftLeft.setPower(power);
@@ -78,6 +83,9 @@ public class IO implements Subsystem {
             liftPow = power;
         }
     }
+
+    public void killPower() {liftPos = -100;}
+    public void dropToError() {double p = getTargetLiftPos() - getLiftTickPos(); if(p < -50){liftPos = p;}}
 
     public void openClaw() {
         left.setPosition(0.7);
@@ -93,11 +101,11 @@ public class IO implements Subsystem {
 
     public void raiseLift() {liftPos+=10;}
 
-    public void lowerLift() {if(liftPos > 100){liftPos-=10;}}
+    public void lowerLift() {if(liftPos > 100+ LIFTPOSMIN) {liftPos-=10;}}
 
     public void raiseLift(int i) {liftPos+=(10*i);}
 
-    public void lowerLift(int i) {if(liftPos > 100){liftPos-=(10*i);}}
+    public void lowerLift(int i) {if(liftPos > 100+LIFTPOSMIN){liftPos-=(10*i);}}
 
     public void setLiftHigh() {liftPos = 900;}
 

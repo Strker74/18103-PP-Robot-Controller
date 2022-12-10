@@ -68,6 +68,7 @@ public class Robot extends OpMode {
             system.update(getDt(), telemetry);
         }
         telemetry.update();
+        //telemetry.addData("Mode", drive.getModeName());
     }
 
     public void initDrive() {

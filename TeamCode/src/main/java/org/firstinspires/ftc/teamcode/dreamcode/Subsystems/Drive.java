@@ -11,6 +11,9 @@ import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
 public class Drive implements Subsystem {
 
+    //DriveMode mode = DriveMode.Sport;
+    //double y, x, turn;
+
     DcMotorEx fl;
     DcMotorEx fr;
     DcMotorEx bl;
@@ -29,7 +32,7 @@ public class Drive implements Subsystem {
 
     @Override
     public void update(double dt, Telemetry telemetry) {
-
+        //telemetry.addData("Mode", mode.getName());
     }
 
     @Override
@@ -37,6 +40,11 @@ public class Drive implements Subsystem {
         setDriveMotors(0);
     }
 
+    /*public void changeMode(){
+        if(mode == DriveMode.Sport){mode = DriveMode.Optimized;}
+        if(mode == DriveMode.Optimized){mode = DriveMode.Sport;}
+        POVMecanumDrive(y, x, turn, mode);
+    }*/
     /**
      * Sets Drive to go forward/backwards
      * @param power Speed of movement
@@ -77,6 +85,10 @@ public class Drive implements Subsystem {
      * @param mode Drivetrain Speed Setting (Sport, Normal, Economy)
      */
     public void POVMecanumDrive(double y, double x, double turn, DriveMode mode) {
+        //this.mode = mode;
+        //this.y = y;
+        //this.x = x;
+        //this.turn = turn;
         double v1 = -(-y - (turn * Constants.turnScale) - (x/Constants.strafeScale));
         double v2 = -(-y - (turn * Constants.turnScale) + (x/Constants.strafeScale));
         double v3 = -(-y + (turn * Constants.turnScale) - (x/Constants.strafeScale));
@@ -96,6 +108,7 @@ public class Drive implements Subsystem {
         br.setPower(v3 * mode.getScaling());
         fr.setPower(v4 * mode.getScaling());
     }
+
 
     /**
      * Field-Centric Mecanum Drive Control

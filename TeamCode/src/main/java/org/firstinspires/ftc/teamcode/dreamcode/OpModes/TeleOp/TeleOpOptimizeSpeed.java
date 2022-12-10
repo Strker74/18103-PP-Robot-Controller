@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.dreamcode.Robot;
 import org.firstinspires.ftc.teamcode.dreamcode.States.DriveMode;
 
 @TeleOp
-public class Main extends Robot {
+public class TeleOpOptimizeSpeed extends Robot {
     int presses = 0;
 
     @Override
@@ -19,12 +19,12 @@ public class Main extends Robot {
     public void loop() {
         super.loop();
         super.getDrive().POVMecanumDrive(-gamepad1.left_stick_y,
-                gamepad1.left_stick_x, gamepad1.right_stick_x, DriveMode.Sport);
+                gamepad1.left_stick_x, gamepad1.right_stick_x, DriveMode.Optimized);
 
         if (gamepad1.a) {super.getIo().openClaw();}
         if (gamepad1.b) {super.getIo().closeClaw();}
-
-            //{super.getIo().raiseLift100();}
+        if (gamepad1.x) {super.getIo().dropToError();}
+        //{super.getIo().raiseLift100();}
         if (gamepad1.y) {super.getIo().resetLift();}
         if (gamepad1.dpad_up) {super.getIo().setLiftHigh();}
         if (gamepad1.dpad_left || gamepad1.dpad_right) {super.getIo().setLiftMid();}
