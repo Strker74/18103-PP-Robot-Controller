@@ -7,28 +7,22 @@ public class BlueTerminalRedSide extends AutoTemplate {
 
     @Override
     public void buildPath() {
-        setStartA(180);
-        path.add(this::closeClaw);
-        /*try{
-            sleep(2000);
-        } catch (Exception e){
-            e.printStackTrace();
-        }*/
+        setStartA(0);
 
-        path.add(() -> tilePointDrive(.6, 0, 180));
-        path.add(this::setLiftMidA);
-        path.add(() -> tilePointDrive(.6, .1, 180));
-        //path.add(this::setLiftLow);
+        path.add(() -> tilePointDrive(0, -0.075, 0));
+        path.add(this::closeClaw);
+        path.add(() -> pause(1));
+        path.add(() -> lift(200));
+        path.add(() -> tilePointDrive(1.1, 0, 0));
+        path.add(this::setLiftMid);
+        path.add(()-> tilePointDrive(1.3, .4, 90));
         path.add(this::openClaw);
-        path.add(() -> tilePointDrive(.6, 0, 180));
-        path.add(() -> tilePointDrive(1, 0, 180));
-        //super.getIo().setLiftDown();
+        path.add(() -> pause(0.2));
         switch(visionAnalysis){
-            case 0: path.add(() -> tilePointDrive(1.25, 1, 180)); break;
-            case 1: path.add(() -> tilePointDrive(1.25, 0, 180)); break;
-            case 2: path.add(() -> tilePointDrive(1.25, -1, 180)); break;
+            case 0: path.add(() -> tilePointDrive(1.1, 1, 90)); break;
+            case 1: path.add(() -> tilePointDrive(1.1, 0, 90)); break;
+            case 2: path.add(() -> tilePointDrive(1.1, -1, 90)); break;
         }
-        telemetry.addData("Auton Done!", visionAnalysis);
-        path.add(this::setLiftDownA);
+        //telemetry.addData("Auton Done!", visionAnalysis);
     }
 }

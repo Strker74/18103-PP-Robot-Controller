@@ -7,11 +7,9 @@ import org.firstinspires.ftc.teamcode.dreamcode.States.DriveMode;
 
 @TeleOp
 public class Main extends Robot {
-    int presses = 0;
 
     @Override
     public void init() {
-
         super.init();
     }
 

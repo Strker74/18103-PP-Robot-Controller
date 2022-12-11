@@ -97,7 +97,7 @@ public class IO implements Subsystem {
         right.setPosition(0);
     }
 
-    public void setLiftMid() {liftPos = 600;}
+    public void setLiftMid() {liftPos = 700;}
 
     public void raiseLift() {liftPos+=10;}
 

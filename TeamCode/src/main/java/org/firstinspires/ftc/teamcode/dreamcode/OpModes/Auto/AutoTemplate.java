@@ -120,7 +120,7 @@ public abstract class AutoTemplate extends Robot {
     public void lift(double pos, double ta) {
         if (super.getIo().getTargetLiftPos() != pos) {
             super.getIo().setLiftPos(pos);
-        } else if (super.getIo().IsOff()) {
+        } else if (Math.abs(super.getIo().getLiftTickPos() - super.getIo().getTargetLiftPos()) < 12*ta) {
             pathStep++;
             timer.reset();
         }
@@ -130,6 +130,9 @@ public abstract class AutoTemplate extends Robot {
         lift(pos, 10);
     }
 
+
+
+
     public void liftIncrement(double adjustment) {
         if (!increment) {
             getIo().AutoPosAdjustLift(adjustment);
@@ -137,6 +140,13 @@ public abstract class AutoTemplate extends Robot {
         }
         if (super.getIo().IsOff()) {
             increment = false;
+            pathStep++;
+            timer.reset();
+        }
+    }
+
+    public void pause(double lapse) {
+        if (timer.seconds() > lapse) {
             pathStep++;
             timer.reset();
         }
@@ -152,11 +162,15 @@ public abstract class AutoTemplate extends Robot {
     public void closeClaw() {
         super.getIo().closeClaw();
         pathStep++;
+        timer.reset();
     }
+
+
 
     public void openClaw() {
         super.getIo().openClaw();
         pathStep++;
+        timer.reset();
     }
 
     public int updateVisionAnalysis() {
