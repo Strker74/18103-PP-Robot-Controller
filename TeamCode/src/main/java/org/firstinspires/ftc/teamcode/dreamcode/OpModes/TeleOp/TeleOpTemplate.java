@@ -20,8 +20,7 @@ public abstract class TeleOpTemplate extends Robot {
     Profile py;
     ElapsedTime timer = new ElapsedTime();
     Path path = new Path(this::stopRobot);
-    double tile = Constants.tile, startA = 0;
-    int visionAnalysis = 0;
+    double tile = Constants.tile, startA = 0, x = 0, y = 0, a = 0;
     boolean increment = false;
 
     @Override
@@ -30,22 +29,19 @@ public abstract class TeleOpTemplate extends Robot {
     }
 
     @Override
-    public void init_loop() {
-        super.init_loop();
-        visionAnalysis = updateVisionAnalysis();
-    }
-
-    @Override
     public void start() {
-        visionAnalysis = updateVisionAnalysis();
-        //buildPath();
     }
 
     @Override
     public void loop() {
-        //telemetry.addData("pathStep", pathStep);
         super.loop();
-        path.run(pathStep);
+        tilePointDrive(x, y, a);
+    }
+
+    public void PIDDrive(double y, double x, double a) {
+        this.x += x * Constants.xScale;
+        this.y += y * Constants.yScale;
+        this.a += a * Constants.aScale;
     }
 
     // Old
@@ -161,30 +157,9 @@ public abstract class TeleOpTemplate extends Robot {
         timer.reset();
     }
 
-
-
     public void openClaw() {
         super.getIo().openClaw();
         pathStep++;
         timer.reset();
     }
-
-    public int updateVisionAnalysis() {
-        return getEstimator().getVisionAnalysis();
-    }
-
-    public int getVisionAnalysis() {
-        return visionAnalysis;
-    }
-
-    /*public void spin(double pow, double time) {
-        if (timer.seconds() < time) {
-            super.getSpinner().spin(pow);
-        } else {
-            super.stopRobot();
-            timer.reset();
-            pathStep++;
-        }
-    }*/
-
 }

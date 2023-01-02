@@ -4,6 +4,7 @@ import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+// X is forward
 @Autonomous
 public class VisionPark extends AutoTemplate {
 

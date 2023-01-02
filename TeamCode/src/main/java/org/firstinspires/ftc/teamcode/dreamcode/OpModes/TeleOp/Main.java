@@ -8,8 +8,6 @@ import org.firstinspires.ftc.teamcode.dreamcode.States.DriveMode;
 @TeleOp
 public class Main extends Robot {
 
-    double x = 0, y = 0, a = 0;
-
     @Override
     public void init() {
         super.init();
@@ -18,8 +16,8 @@ public class Main extends Robot {
     @Override
     public void loop() {
         super.loop();
-
-        //super.getDrive().;
+        super.getDrive().POVMecanumDrive(-gamepad1.left_stick_y,
+                gamepad1.left_stick_x, gamepad1.right_stick_x, DriveMode.Sport);
 
         if (gamepad1.a) {super.getIo().openClaw();}
         if (gamepad1.b) {super.getIo().closeClaw();}
