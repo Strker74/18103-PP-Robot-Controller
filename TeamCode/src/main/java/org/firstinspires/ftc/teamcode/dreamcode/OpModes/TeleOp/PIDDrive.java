@@ -16,7 +16,7 @@ public class PIDDrive extends TeleOpTemplate {
     public void loop() {
         super.loop();
 
-        PIDDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        PIDDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
         if (gamepad1.a) {super.getIo().openClaw();}
         if (gamepad1.b) {super.getIo().closeClaw();}
@@ -27,7 +27,7 @@ public class PIDDrive extends TeleOpTemplate {
         if (gamepad1.dpad_left || gamepad1.dpad_right) {super.getIo().setLiftMid();}
         if (gamepad1.dpad_down) {super.getIo().setLiftLow();}
         if (gamepad1.left_bumper) {super.getIo().setLiftDown();}
-        if (gamepad1.right_bumper) {super.getIo().killPower();}
+        //if (gamepad1.right_bumper) {super.getIo().killPower();}
 
         super.getIo().PosAdjustLift(gamepad1.right_trigger - gamepad1.left_trigger);
         //super.getIo().runLift(gamepad1.right_trigger - gamepad1.left_trigger);

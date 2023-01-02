@@ -20,6 +20,7 @@ public class IO implements Subsystem {
     double kpu = 0.0075, kpd = 0.005, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
             ka = 0, ks = 0.13, ksd = 0.65, liftPos = 0, liftPow = 0, bias = 0;
     boolean isOff = true;
+    double runningUpLowError = 0;
 
     public IO(DcMotorEx liftLeft, DcMotorEx liftRight, Servo left, Servo right) {
         this.liftLeft = liftLeft;
@@ -44,7 +45,7 @@ public class IO implements Subsystem {
         double e = (ticks - getLiftTickPos());
         if (e >= 0) {
             if (Math.abs(e) > ty) {
-                runLift(kpu * e /*+ ks*/);
+                runLift(kpu * e + ks);
                 return false;
             } else {
                 return true;
@@ -84,8 +85,8 @@ public class IO implements Subsystem {
         }
     }
 
-    public void killPower() {liftPos = -100;}
-    public void dropToError() {double p = getTargetLiftPos() - getLiftTickPos(); if(p < -50){liftPos = p;}}
+    //public void killPower() {liftPos = -100;}
+    //public void dropToError() {double p = getTargetLiftPos() - getLiftTickPos(); if(p < -50){liftPos = p;}}
 
     public void openClaw() {
         left.setPosition(0.7);
@@ -97,7 +98,7 @@ public class IO implements Subsystem {
         right.setPosition(0);
     }
 
-    public void setLiftMid() {liftPos = 700;}
+    public void setLiftMid() {liftPos = 625;}
 
     public void raiseLift() {liftPos+=10;}
 
@@ -109,7 +110,16 @@ public class IO implements Subsystem {
 
     public void setLiftHigh() {liftPos = 900;}
 
-    public void setLiftLow() {liftPos = 300;}
+    public void setLiftLow() {liftPos = 350;}
+
+    public void setLiftLower() {
+        if(getLiftTickPos() > 350) liftPos = 350;
+        else if(getLiftTickPos() < 350){
+            liftPos = 350 + runningUpLowError;
+            double error = liftPos - getLiftTickPos();
+            runningUpLowError=error;
+        }
+    }
 
     public void AutoPosAdjustLift(double pos) {
         PosAdjustLift(pos * 25/Motors.GoBILDA_312.getTicksPerRev());
@@ -145,7 +155,18 @@ public class IO implements Subsystem {
         telemetry.addData("Lift Target Position", getTargetLiftPos());
         telemetry.addData("Lift Encoder Position", getLiftTickPos());
         telemetry.addData("Lift Error", getTargetLiftPos() - getLiftTickPos());
+        gainScheduleKs();
         isOff = PIDTickLift(liftPos,10);
+    }
+
+    public void gainScheduleKs() {
+        if (getTargetLiftPos() == 0) {
+            ksd = 0;
+            ks = 0;
+        } else {
+            ksd = ksdHold;
+            ks = ksHold;
+        }
     }
 
     @Override

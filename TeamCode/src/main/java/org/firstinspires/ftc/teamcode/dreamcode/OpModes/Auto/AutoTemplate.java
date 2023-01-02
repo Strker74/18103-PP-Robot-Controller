@@ -157,7 +157,7 @@ public abstract class AutoTemplate extends Robot {
     public void setLiftMidA() {lift(600);}
     public void setLiftHigh() {lift(Constants.HIGH_GOAL);}
     public void setLiftDownA() {lift(0);}
-    public void killPowerA() {super.getIo().killPower();}
+    //public void killPowerA() {super.getIo().killPower();}
 
     public void closeClaw() {
         super.getIo().closeClaw();

@@ -10,8 +10,8 @@ public final class Constants {
     public static final double R = 50/25.4; // Drive Wheel Radius (in)
     public static final double COLLISION_THRESHOLD_DELTA_G = 0.5;
     public static final double tile = 24;
-    public static final double xScale = 0.75;
-    public static final double yScale = 0.75;
+    public static final double xScale = 0.05;
+    public static final double yScale = 0.05;
     public static final double aScale = 5;
     // IO Subsystem
     public static final double LOW_GOAL = 300;
