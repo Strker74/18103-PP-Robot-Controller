@@ -1,20 +1,35 @@
 package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
+import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 
 @Autonomous
-public class BlueTerminalRedSideCycle extends AutoTemplate {
-
+public class BTRSCycle extends AutoTemplate {
+    private double tile = 1;
+    private double[] myJunc = {Constants.HIGH_GOAL, Constants.MID_GOAL, Constants.LOW_GOAL};
     private void cycle(double d, int i){
-        path.add(() -> tilePointDrive(.65, -.1, 0));
-        path.add(() -> tilePointDrive(.65, -1.6, 0));
-        path.add(() -> tilePointDrive(1.65, -1.6, 0));
+        double x = 1.65;
+        double y = -1.6;
+        double a = 0;
+
+        // once your at the cone stack
         // path.add(() -> setLiftPos(d));
-        // path.add(() -> tilePointDrive(1.65, -1.7, 0));
+        // path.add(() -> tilePointDrive(x, y, a));
         // path.add(() -> raiseLift());
-        // path.add(() -> tilePointDrive(1.65, -1.6, 0));
-        // path.add(() -> tilePointDrive(1.65, -1.6, 180));
+        // path.add(() -> tilePointDrive(x, y, 90));
+        // path.add(() -> tilePointDrive(x-.65, y, 90));
+        // path.add(() -> tilePointDrive(x-.65, y+tile*i+.65, 90));
+        // path.add(() -> tilePointDrive(x-.65, y+tile*i+.65, 90));
+        // path.add(() -> setLiftPos(myJunc[i]);
+        // path.add(() -> tilePointDrive(x-.75, y+tile*i+.65, 90));
+        // path.add(() -> lowerLift());
+        // path.add(() -> openClaw());
+        // path.add(() -> pause(1));
+        // path.add(() -> tilePointDrive(x-.65, y+tile*i+.65, 90));
+        // path.add(() -> tilePointDrive(x-.65, y+tile*i+.65, a));
+        // path.add(() -> tilePointDrive(x, y+tile*i+.65, a));
+        // path.add(() -> tilePointDrive(x, y, a));
     }
     @Override
     public void buildPath() {

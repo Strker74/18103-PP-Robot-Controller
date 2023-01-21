@@ -14,9 +14,9 @@ public final class Constants {
     public static final double yScale = 0.05;
     public static final double aScale = 5;
     // IO Subsystem
-    public static final double LOW_GOAL = 300;
-    public static final double MID_GOAL = 300;
-    public static final double HIGH_GOAL = 300;
+    public static final double LOW_GOAL = 400;
+    public static final double MID_GOAL = 625;
+    public static final double HIGH_GOAL = 900;
     public static final double[] CONESTACKTICKS = {260d, 180d, 170d};
 
     // Vuforia Vision
