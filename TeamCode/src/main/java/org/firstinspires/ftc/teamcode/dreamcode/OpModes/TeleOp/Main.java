@@ -28,7 +28,6 @@ public class Main extends Robot {
         if (gamepad1.dpad_left || gamepad1.dpad_right) {super.getIo().setLiftMid();}
         if (gamepad1.dpad_down) {super.getIo().setLiftLow();}
         if (gamepad1.left_bumper) {super.getIo().setLiftDown();}
-        if (gamepad1.right_bumper) {super.getIo().setLiftLower();}
         //if (gamepad1.right_bumper) {super.getIo().killPower();}
 
         super.getIo().PosAdjustLift(gamepad1.right_trigger - gamepad1.left_trigger);

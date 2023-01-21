@@ -14,12 +14,12 @@ public class IO implements Subsystem {
     Servo left, right;
     final double LIFTPOSMIN = -100, LIFTPOSMAX = 950;
     double fixLift = .0055;
-    final double kpuHold = 0.0075, kiHold = 0, kpdHold = 0.005,
+    final double kpuHold = 0.0075, kiHold = 0, kdHold = 0, kpdHold = 0.005,
             kvHold = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
             kaHold = 0, ksHold = 0.13, ksdHold = 0.65, liftPosHold = 0, liftPowHold = 0, biasHold = 0;
-    double kpu = 0.0075, ki = 0, kpd = 0.005, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
+    double kpu = 0.0075, ki = 0, kd = 0, kpd = 0.005, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
             ka = 0, ks = 0.13, ksd = 0.65, liftPos = 0, liftPow = 0, bias = 0;
-    double integral = 0;
+    double integral = 0, derivative = 0;
     boolean isOff = true;
     double runningUpLowError = 0;
 
@@ -42,7 +42,7 @@ public class IO implements Subsystem {
         }
     }
 
-    public boolean PIDTickLift(double ticks, double ty) {
+    public boolean PTickLift(double ticks, double ty) {
         double e = (ticks - getLiftTickPos());
         if (e >= 0) {
             if (Math.abs(e) > ty) {
@@ -61,21 +61,27 @@ public class IO implements Subsystem {
         }
     }
 
-    public boolean PITickLift(double ticks, double ty, double dt) {
+    public boolean PIDTickLift(double ticks, double ty, double dt) {
         double e = (ticks - getLiftTickPos());
         integral += e * dt;
+        derivative = (e - derivative) / dt;
         if (e >= 0) {
             if (Math.abs(e) > ty) {
-                runLift(kpu * e + ki * integral + ks);
+                runLift(kpu * e + ki * integral + kd * derivative + ks);
+                derivative = e;
                 return false;
             } else {
+                derivative = 0;
                 return true;
             }
         } else {
             if (Math.abs(e) > ty) {
-                runLift(MathFx.scale(-0.15,1,kpu * e + ki * integral + ks));
+                runLift(MathFx.scale(-0.15,1,kpu * e + ki *
+                        integral + kd * derivative + ks));
+                derivative = e;
                 return false;
             } else {
+                derivative = 0;
                 return true;
             }
         }
@@ -131,16 +137,7 @@ public class IO implements Subsystem {
 
     public void setLiftHigh() {liftPos = 900;}
 
-    public void setLiftLow() {liftPos = 350;}
-
-    public void setLiftLower() {
-        if(getLiftTickPos() > 350) liftPos = 350;
-        else if(getLiftTickPos() < 350){
-            liftPos = 350 + runningUpLowError;
-            double error = liftPos - getLiftTickPos();
-            runningUpLowError=error;
-        }
-    }
+    public void setLiftLow() {liftPos = 400;}
 
     public void AutoPosAdjustLift(double pos) {
         PosAdjustLift(pos * 25/Motors.GoBILDA_312.getTicksPerRev());
@@ -178,7 +175,7 @@ public class IO implements Subsystem {
         telemetry.addData("Lift Error", getTargetLiftPos() - getLiftTickPos());
         gainScheduleKs();
         //isOff = PIDTickLift(liftPos,10);
-        isOff = PITickLift(liftPos,10, dt);
+        isOff = PIDTickLift(liftPos,10, dt);
     }
 
     public void gainScheduleKs() {
