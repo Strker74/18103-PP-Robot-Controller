@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous
-public class RedTerminalRedSide extends AutoTemplate {
+public class RTRSPark extends AutoTemplate {
 
    @Override
    public void buildPath() {

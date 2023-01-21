@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 @Disabled
 @Autonomous
-public class BlueTerminalBlueSide extends AutoTemplate {
+public class BTBSOld extends AutoTemplate {
 
     @Override
     public void buildPath() {

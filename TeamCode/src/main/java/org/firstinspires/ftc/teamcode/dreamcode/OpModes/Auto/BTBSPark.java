@@ -5,7 +5,7 @@ package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous
-public class BlueTerminalBlueSidePush extends AutoTemplate {
+public class BTBSPark extends AutoTemplate {
 
     @Override
     public void buildPath() {

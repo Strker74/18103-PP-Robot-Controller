@@ -214,7 +214,7 @@ public abstract class AutoTemplate extends Robot {
             }
         }
         points.add(visionAnalysis);
-        for (int i : points) {
+        for (int i : points) { // access loop cycle using points.get(i)
             path.add(() -> tilePointDrive(2, 1 - i, 0));
             path.add(() -> tilePointDrive(2, 1, 0));
         }
