@@ -154,7 +154,8 @@ public abstract class AutoTemplate extends Robot {
 
     public void setLiftLow() {lift(Constants.LOW_GOAL);}
     public void setLiftMid() {lift(Constants.MID_GOAL);}
-    public void setLiftMidA() {lift(600);}
+    public void setLiftLowA() {lift(350);}
+    public void setLiftMidA() {lift(625);}
     public void setLiftHigh() {lift(Constants.HIGH_GOAL);}
     public void setLiftDownA() {lift(0);}
     //public void killPowerA() {super.getIo().killPower();}
@@ -179,6 +180,15 @@ public abstract class AutoTemplate extends Robot {
 
     public int getVisionAnalysis() {
         return visionAnalysis;
+    }
+
+    public void visionParking180(){
+
+        switch(visionAnalysis){
+            case 0: path.add(() -> tilePointDrive(1.25, 1, 180)); break;
+            case 1: path.add(() -> tilePointDrive(1.25, 0, 180)); break;
+            case 2: path.add(() -> tilePointDrive(1.25, -1, 180)); break;
+        }
     }
 
     /*public void spin(double pow, double time) {
