@@ -6,6 +6,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 @Autonomous
 public class BlueTerminalRedSideCycle extends AutoTemplate {
 
+    private void cycle(double d, int i){
+        path.add(() -> tilePointDrive(.65, -.1, 0));
+        path.add(() -> tilePointDrive(.65, -1.6, 0));
+        path.add(() -> tilePointDrive(1.65, -1.6, 0));
+        // path.add(() -> setLiftPos(d));
+        // path.add(() -> tilePointDrive(1.65, -1.7, 0));
+        // path.add(() -> raiseLift());
+        // path.add(() -> tilePointDrive(1.65, -1.6, 0));
+        // path.add(() -> tilePointDrive(1.65, -1.6, 180));
+    }
     @Override
     public void buildPath() {
         setStartA(180);
@@ -25,9 +35,8 @@ public class BlueTerminalRedSideCycle extends AutoTemplate {
         path.add(() -> setLiftDownA());
         path.add(() -> pause(2));
         path.add(() -> tilePointDrive(.575, -.1, 0));
-        path.add(() -> tilePointDrive(.65, -.1, 0));
-        //path.add(() -> tilePointDrive(.65, -1, 0));
-        //path.add(() -> tilePointDrive(1.575, -1, 0));
+
+
 
         //visionParking180();
 
