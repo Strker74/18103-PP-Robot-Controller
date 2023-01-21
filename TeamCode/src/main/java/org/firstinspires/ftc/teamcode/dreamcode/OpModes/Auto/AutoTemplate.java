@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.lib.motion.Profile;
 import org.firstinspires.ftc.teamcode.lib.motion.TrapezoidalMotionProfile;
 import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
+import java.util.ArrayList;
+
 public abstract class AutoTemplate extends Robot {
 
     int pathStep = 0;
@@ -190,6 +192,30 @@ public abstract class AutoTemplate extends Robot {
             case 0: path.add(() -> tilePointDrive(1.25, 1, 180)); break;
             case 1: path.add(() -> tilePointDrive(1.25, 0, 180)); break;
             case 2: path.add(() -> tilePointDrive(1.25, -1, 180)); break;
+        }
+    }
+
+    // Assumes setStartA(180);
+    public void visionParkCycle() {
+        switch(visionAnalysis){
+            case 0: path.add(() -> tilePointDrive(2, 1, 0)); break;
+            case 1: path.add(() -> tilePointDrive(2, 0, 0)); break;
+            case 2: path.add(() -> tilePointDrive(2, -1, 0)); break;
+        }
+        //telemetry.addData("Auton Done!", visionAnalysis);
+    }
+
+    public void sameSideCyclePark() {
+        ArrayList<Integer> points = new ArrayList<Integer>();
+        for (int i = 2; i >= 0; i--) {
+            if (i != visionAnalysis) {
+                points.add(i);
+            }
+        }
+        points.add(visionAnalysis);
+        for (int i : points) {
+            path.add(() -> tilePointDrive(2, 1 - i, 0));
+            path.add(() -> tilePointDrive(2, 1, 0));
         }
     }
 
