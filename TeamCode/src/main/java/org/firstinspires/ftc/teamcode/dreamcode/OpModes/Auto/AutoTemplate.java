@@ -220,6 +220,20 @@ public abstract class AutoTemplate extends Robot {
         }
     }
 
+    public void oppSideCyclePark() {
+        ArrayList<Integer> points = new ArrayList<Integer>();
+        for (int i = 0; i <= 2; i--) {
+            if (i != visionAnalysis) {
+                points.add(i);
+            }
+        }
+        points.add(visionAnalysis);
+        for (int i : points) { // access loop cycle using points.get(i)
+            path.add(() -> tilePointDrive(2, 1 - i, 0));
+            path.add(() -> tilePointDrive(2, 1, 0));
+        }
+    }
+
     /*public void spin(double pow, double time) {
         if (timer.seconds() < time) {
             super.getSpinner().spin(pow);
