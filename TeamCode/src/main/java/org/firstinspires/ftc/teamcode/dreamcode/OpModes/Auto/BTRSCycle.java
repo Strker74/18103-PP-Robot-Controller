@@ -23,7 +23,7 @@ public class BTRSCycle extends AutoTemplate {
         path.add(() -> tilePointDrive(x-.65, y, 90));
         path.add(() -> tilePointDrive(x-.65, y+tile*i+.65, 90));
         path.add(() -> tilePointDrive(x-.65, y+tile*i+.65, 90));
-        path.add(() -> setLiftPos(myJunc[i]);
+        path.add(() -> setLiftPos(myJunc[i]));
         path.add(() -> tilePointDrive(x-.75, y+tile*i+.65, 90));
         path.add(() -> lowerLift());
         path.add(() -> openClaw());
