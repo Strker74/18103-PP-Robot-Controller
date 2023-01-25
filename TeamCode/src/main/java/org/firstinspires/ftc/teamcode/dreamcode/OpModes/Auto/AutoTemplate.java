@@ -213,10 +213,14 @@ public abstract class AutoTemplate extends Robot {
                 points.add(i);
             }
         }
+        double x = 1.8;
         points.add(visionAnalysis);
         for (int i : points) { // access loop cycle using points.get(i)
-            path.add(() -> tilePointDrive(2, 1 - i, 0));
-            path.add(() -> tilePointDrive(2, 1, 0));
+            path.add(() -> tilePointDrive(x, 0.91, 0));
+            //path.add(() -> tilePointDrive(2, 0.91, 0));
+            path.add(() -> tilePointDrive(x, (1 - i), 0));
+            path.add(() -> tilePointDrive(x, (1 - i), -135));
+            path.add(() -> tilePointDrive(x, (1 - i), 0));
         }
     }
 
@@ -227,8 +231,15 @@ public abstract class AutoTemplate extends Robot {
                 points[i] = i;
             }
         }
+
         points[2] = visionAnalysis; // add vision park at the end
         return points; // return the array
+
+        /*points.add(visionAnalysis);
+        for (int i : points) { // access loop cycle using points.get(i)
+            path.add(() -> tilePointDrive(2, 1, 0));
+            path.add(() -> tilePointDrive(2, 1 - i, 0));
+        }*/
     }
 
     /*public void spin(double pow, double time) {
