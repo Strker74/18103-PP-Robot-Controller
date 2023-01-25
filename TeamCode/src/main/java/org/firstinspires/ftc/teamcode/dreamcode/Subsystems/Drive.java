@@ -91,9 +91,10 @@ public class Drive implements Subsystem {
         //this.turn = turn;
         double v1 = -(-y - (turn * Constants.turnScale) - (x/Constants.strafeScale));
         double v2 = -(-y - (turn * Constants.turnScale) + (x/Constants.strafeScale));
-        double v3 = -(-y + (turn * Constants.turnScale) - (x/Constants.strafeScale));
+        double v3 = -(-y + (turn * Constants.turnScale) - (x/Constants.strafeScale)) * 4/3;
         double v4 = -(-y + (turn * Constants.turnScale) + (x/Constants.strafeScale)) *
                 Motors.GoBILDA_435.getRPM()/Motors.GoBILDA_312.getRPM();
+
 
         double v = Math.max(Math.max(Math.max(Math.abs(v1), Math.abs(v2)), Math.abs(v3)), Math.abs(v4));
         if (v > 1) {
