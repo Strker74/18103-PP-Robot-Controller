@@ -221,14 +221,14 @@ public abstract class AutoTemplate extends Robot {
     }
 
     public int[] oppSideCyclePark() {
-        int[] points = new int[3];
+        int[] points = new int[3]; // creates an array of length 3
         for (int i = 0; i <= 2; i--) {
-            if (i != visionAnalysis) {
+            if (i != visionAnalysis) { // as long as the number isn't the same as the park position add it
                 points[i] = i;
             }
         }
-        points[2] = visionAnalysis;
-        return points;
+        points[2] = visionAnalysis; // add vision park at the end
+        return points; // return the array
     }
 
     /*public void spin(double pow, double time) {
