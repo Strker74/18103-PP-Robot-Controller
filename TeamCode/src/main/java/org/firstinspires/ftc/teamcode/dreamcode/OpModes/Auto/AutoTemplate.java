@@ -21,9 +21,9 @@ public abstract class AutoTemplate extends Robot {
     Profile px;
     Profile py;
     ElapsedTime timer = new ElapsedTime();
-    Path path = new Path(this::stopRobot);
+    public Path path = new Path(this::stopRobot);
     double tile = Constants.tile, startA = 0;
-    int visionAnalysis = 0;
+    public int visionAnalysis = 0;
     boolean increment = false;
 
 
@@ -156,7 +156,7 @@ public abstract class AutoTemplate extends Robot {
 
     public void setLiftLow() {lift(Constants.LOW_GOAL);}
     public void setLiftMid() {lift(Constants.MID_GOAL);}
-    public void setLiftLowA() {lift(350);}
+    public void setLiftLowA() {lift(450);}
     public void setLiftMidA() {lift(625);}
     public void setLiftPos(double d) {lift(d);}
     public void setLiftHigh() {lift(Constants.HIGH_GOAL);}
@@ -198,13 +198,67 @@ public abstract class AutoTemplate extends Robot {
 
     // Assumes setStartA(180);
     public void visionParkCycle() {
-        switch(visionAnalysis){
-            case 0: path.add(() -> tilePointDrive(2, 1, 0)); break;
-            case 1: path.add(() -> tilePointDrive(2, 0, 0)); break;
-            case 2: path.add(() -> tilePointDrive(2, -1, 0)); break;
+        ArrayList<Integer> points = new ArrayList<Integer>();
+        double x = 1.9, y = 0.77;
+        points.add(visionAnalysis);
+        for (int i : points) { // access loop cycle using points.get(i)
+            path.add(() -> tilePointDrive(x, y, 0));
+            path.add(this::openClaw);
+            path.add(() -> setLiftPos(Constants.CONESTACKTICKS[points.indexOf(i)]));
+            path.add(() -> pause(2));
+            path.add(() -> tilePointDrive(x, y+.075, 0));
+            path.add(this::closeClaw);
+            path.add(() -> pause(.5));
+            path.add(() -> setLiftPos(Constants.CONESTACKTICKS[points.indexOf(i)] + 100));
+            path.add(() -> tilePointDrive(x, y-1.1,0));
+            //path.add(this::setLiftDownA);
+            path.add(() -> tilePointDrive(x, y-1.1,-35));
+            path.add(this::setLiftMidA);
+            path.add(() -> pause(.5));
+            path.add(() -> tilePointDrive(x-.5, y-1.1+.5,-35));
+            path.add(() -> setLiftPos(350 - 100));
+            path.add(this::openClaw);
+            path.add(() -> tilePointDrive(x, y-1.1, -45));
+            path.add(() -> tilePointDrive(x, y-1.1, 0));
+            switch(visionAnalysis){
+                case 0: path.add(() -> tilePointDrive(x, y, 0)); break;
+                case 1: path.add(() -> tilePointDrive(x, 0, 0)); break;
+                case 2: path.add(() -> tilePointDrive(x, -1, 0)); break;
+            }
+
+
+            //path.add(() -> tilePointDrive(2, 0.91, 0));
+            //path.add(() -> tilePointDrive(x, y*(1 - i), 0));
+            //path.add(() -> tilePointDrive(x, y*(1 - i), -135));
+            //path.add(() -> tilePointDrive(x, y*(1 - i), -points.get(i) * 45.));
         }
-        //telemetry.addData("Auton Done!", visionAnalysis);
     }
+
+    public void lowCyclePark() {
+        //ArrayList<Integer> points = new ArrayList<Integer>();
+        double x = 1.9, y = 0.77;
+        path.add(() -> tilePointDrive(x, y, 0));
+        path.add(this::openClaw);
+        path.add(() -> setLiftPos(Constants.CONESTACKTICKS[0]));
+        path.add(() -> pause(1));
+        path.add(() -> tilePointDrive(x, y+.12, 0));
+        path.add(this::closeClaw);
+        path.add(() -> pause(.5));
+        path.add(() -> setLiftPos(Constants.CONESTACKTICKS[0] + 100));
+        path.add(() -> tilePointDrive(x, y-1.1,0));
+        path.add(this::setLiftDownA);
+        path.add(() -> tilePointDrive(x, y-1.1,-45));
+        path.add(this::setLiftLowA);
+        path.add(() -> tilePointDrive(x-.5, y-1.1+.5,-45));
+        path.add(() -> setLiftPos(350 + 100));
+        path.add(this::openClaw);
+        path.add(() -> tilePointDrive(x, y-1.1, -45));
+        //path.add(() -> tilePointDrive(2, 0.91, 0));
+        //path.add(() -> tilePointDrive(x, y*(1 - i), 0));
+        //path.add(() -> tilePointDrive(x, y*(1 - i), -135));
+        //path.add(() -> tilePointDrive(x, y*(1 - i), -points.get(i) * 45.));
+    }
+
 
     public void sameSideCyclePark() {
         ArrayList<Integer> points = new ArrayList<Integer>();
@@ -226,7 +280,7 @@ public abstract class AutoTemplate extends Robot {
 
     public int[] oppSideCyclePark() {
         int[] points = new int[3]; // creates an array of length 3
-        for (int i = 0; i <= 2; i--) {
+        for (int i = 2; i >= 0; i--) {
             if (i != visionAnalysis) { // as long as the number isn't the same as the park position add it
                 points[i] = i;
             }

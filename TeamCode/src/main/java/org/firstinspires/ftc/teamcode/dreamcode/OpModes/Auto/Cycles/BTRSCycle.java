@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
+package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.Cycles;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.dreamcode.Constants;
+import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
-    @Autonomous
+@Autonomous
     public class BTRSCycle extends AutoTemplate {
         private double tile = 1;
         private double[] myJunc = {Constants.LOW_GOAL, Constants.MID_GOAL, Constants.HIGH_GOAL}; // An array of junction heights in an order to fit the cycle

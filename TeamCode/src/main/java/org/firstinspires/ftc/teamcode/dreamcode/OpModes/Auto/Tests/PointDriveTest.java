@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
+package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Autonomous
 public class PointDriveTest extends AutoTemplate {

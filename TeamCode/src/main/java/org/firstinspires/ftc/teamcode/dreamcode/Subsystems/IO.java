@@ -94,7 +94,7 @@ public class IO implements Subsystem {
     }
 
     public double getLiftTickPos() {
-        return liftLeft.getCurrentPosition() + bias;
+        return /*(liftRight.getCurrentPosition() + liftRight.getCurrentPosition())/2.*/ liftRight.getCurrentPosition() + bias;
     }
 
     public void PosAdjustLift(double pos) {
@@ -190,6 +190,7 @@ public class IO implements Subsystem {
 
     @Override
     public void stop() {
+        setLiftDown();
         runLift(0);
     }
 

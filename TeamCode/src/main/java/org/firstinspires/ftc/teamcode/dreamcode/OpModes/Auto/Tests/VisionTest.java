@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
+package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.Tests;
 
 import static java.lang.Thread.sleep;
 

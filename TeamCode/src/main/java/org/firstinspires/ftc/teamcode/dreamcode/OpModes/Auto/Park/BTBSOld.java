@@ -1,7 +1,9 @@
-package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto;
+package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.Park;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
+import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Disabled
 @Autonomous
