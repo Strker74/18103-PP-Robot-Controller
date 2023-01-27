@@ -10,6 +10,10 @@ import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
 public class IO implements Subsystem {
 
+    public String adjust = "kpu";
+    double[] scalar = {.00001, .00005, .0001, .0005, .001};
+    int i = 0;
+
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
     final double LIFTPOSMIN = -100, LIFTPOSMAX = 950;
@@ -173,6 +177,11 @@ public class IO implements Subsystem {
         telemetry.addData("Lift Target Position", getTargetLiftPos());
         telemetry.addData("Lift Encoder Position", getLiftTickPos());
         telemetry.addData("Lift Error", getTargetLiftPos() - getLiftTickPos());
+        telemetry.addData("Value Adjusted", adjust);
+        telemetry.addData("Scale Value", scalar[i]);
+        telemetry.addData("kpu", kpu);
+        telemetry.addData("ki", ki);
+        telemetry.addData("kd", kd);
         gainScheduleKs();
         //isOff = PIDTickLift(liftPos,10);
         isOff = PIDTickLift(liftPos,10, dt);
@@ -185,6 +194,30 @@ public class IO implements Subsystem {
         } else {
             ksd = ksdHold;
             ks = ksHold;
+        }
+    }
+
+    public void pidKpIncAdjust(){kpu += scalar[i];}
+    public void pidKpDecAdjust(){kpu -= scalar[i];}
+    public void pidKiIncAdjust(){ki += scalar[i];}
+    public void pidKiDecAdjust(){ki -= scalar[i];}
+    public void pidKdIncAdjust(){kd += scalar[i];}
+    public void pidKdDecAdjust(){kd -= scalar[i];}
+    public void changeScalar(){
+        if(i < scalar.length - 1) i++;
+        if(i == scalar.length) i=0;
+    }
+    public void changeAdjust(){
+        switch(adjust) {
+            case "kpu":
+                adjust = "ki";
+                break;
+            case "ki":
+                adjust = "kd";
+                break;
+            case "kd":
+                adjust = "kpu";
+                break;
         }
     }
 
