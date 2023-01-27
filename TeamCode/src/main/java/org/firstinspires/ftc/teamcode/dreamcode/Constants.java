@@ -13,6 +13,8 @@ public final class Constants {
     public static final double xScale = 0.05;
     public static final double yScale = 0.05;
     public static final double aScale = 5;
+    public static final double kgcmtoNm = 0.0980665;
+
     // IO Subsystem
     public static final double LOW_GOAL = 400;
     public static final double MID_GOAL = 625;
@@ -22,6 +24,7 @@ public final class Constants {
     // Vuforia Vision
     public static final String VUFORIA_KEY = "AWWCp8z/////AAABmQqV/K50N0OTqlyIYanMsyQ6huM5ckTKtdjF0/gyTwTINZPIGhLWxx3ag5PUmAw90BOHnZh3arwMSH0sjWZUM7wTJG/rcPmsj3MFp2eSPPc+osid/6jBjyg8YuhBYFN8jO3YvFlo/24qqX8K1DWOX8GU7dAfZEIhI71HCmY+pRWIGxKWyXxkpf3xULPPommaHqF7wSA/z37uQs+zSTs9SJKxiGvUlF7oYkVkURIuzovMKiK7rRqQT/dmCKH/JFpxgl8Er3O50/DL03EMmmNbjkiqA4vAU7wwD8rTkHympjAl7MnSmQRtXWxyRUildftpaQr7rD8vuz+4A6j/+/nKeTUanIi1fPMuE0Xa+Cth7SDr";
     public static final float mmPerInch = 25.4f;
+    public static final float inPerM = 1/(mmPerInch * 1/1000);
     public static final float mmTargetHeight = (6) * mmPerInch;
     // Perimeter Targets
     public static final float halfField = 72 * mmPerInch;

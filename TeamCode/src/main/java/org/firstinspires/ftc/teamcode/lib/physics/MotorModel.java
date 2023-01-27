@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.lib.physics;
 
+import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 import org.firstinspires.ftc.teamcode.lib.drivers.Motors;
 import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
@@ -11,17 +12,17 @@ public class MotorModel implements Model {
     double eff, gr, kT, R, kV, J;
 
     public static void main(String[] args) {
-        MotorModel motor = new MotorModel(Motors.GoBILDA_435,100, 2d, 1, 1);
+        MotorModel motor = new MotorModel(Motors.GoBILDA_435,100, 2d, 0.9, 2./3);
         //TrapezoidalMotionProfile profile = new TrapezoidalMotionProfile(5*24, .8 * motor.maxV, motor.maxA * .8);
 
-        for (int i = 0; i <= 7; i++) {
+        for (int i = 0; i <= 6; i++) {
             System.out.print(i + " ");
-            motor.run(12, 1);
+            motor.run(12 * ((i <= 3) ? 1 : -1), 1);
             System.out.println(motor.v + " " + motor.p);
             //prev_time = timeStamp;
         }
 
-        System.out.println("Position: " + motor.p + " " + 5*24);
+        System.out.println("Position: " + motor.p*Constants.inPerM + " " + 5*24);
         System.out.println("Velocity: " + motor.v + " " + 0);
         System.out.println("Acceleration: " + motor.a + " " + 0);
     }
@@ -35,7 +36,7 @@ public class MotorModel implements Model {
         reset();
         this.eff = eff;
         this.gr = gr;
-        kT = (motorVersion.getStallTorque()*gr*eff)/(motorVersion.getStallCurrent());
+        kT = (motorVersion.getStallTorque()*Constants.kgcmtoNm*gr*eff)/(motorVersion.getStallCurrent());
         R = maxP/ motorVersion.getStallCurrent();
         kV = (maxP - motorVersion.getFreeCurrent()*R)/maxV;
         this.J = J;

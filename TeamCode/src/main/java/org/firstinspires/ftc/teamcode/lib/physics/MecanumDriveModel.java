@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.lib.physics;
 
+import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 import org.firstinspires.ftc.teamcode.lib.drivers.Motors;
 
 public class MecanumDriveModel implements Model {
@@ -7,14 +8,14 @@ public class MecanumDriveModel implements Model {
     MotorModel fl, fr, bl, br;
     MotorModel[] driveMotors;
     double x, y, T, xd, yd, Td;
-    double r, l, b;
+    double r, l, b, mA = 100d, j = 2d, eff= .9, gr = 2./3;
 
 
     public MecanumDriveModel(double r, double l, double b) {
-        fl = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
-        fr = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
-        bl = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
-        br = new MotorModel(Motors.GoBILDA_312, 100d, 2d, 1, 1);
+        fl = new MotorModel(Motors.GoBILDA_312, mA, j, eff, gr);
+        fr = new MotorModel(Motors.GoBILDA_312, mA, j, eff, gr);
+        bl = new MotorModel(Motors.GoBILDA_312, mA, j, eff, gr);
+        br = new MotorModel(Motors.GoBILDA_312, mA, j, eff, gr);
         driveMotors = new MotorModel[]{fl, fr, bl, br};
         this.r = r;
         this.b = b / 2;
@@ -23,13 +24,34 @@ public class MecanumDriveModel implements Model {
     }
 
     public static void main(String[] args) {
-        MecanumDriveModel model = new MecanumDriveModel(2, 16, 16);
-        for (int i = 0; i * 0.01 < 5; i++) {
+        MecanumDriveModel model = new MecanumDriveModel(1.,
+                16./Constants.inPerM, 16./Constants.inPerM);
+        for (int i = 0; i < 4; i++) {
             System.out.print(i + " ");
-            model.run(12d, 12d, 12d, 12d,0.01);
-            System.out.println(model.getY());
+            model.run(12,
+                    0,
+                    12,
+                    0,
+                    1);
+            System.out.println(model.getXIn());
+            System.out.println(model.getYIn());
+            System.out.println(model.getTDeg());
             //prev_time = timeStamp;
         }
+
+        for (int i = 0; i < 4; i++) {
+            System.out.print(i + " ");
+            model.run(0,
+                    12,
+                    0,
+                    12,
+                    1);
+            System.out.println(model.getXIn());
+            System.out.println(model.getYIn());
+            System.out.println(model.getTDeg());
+            //prev_time = timeStamp;
+        }
+
     }
 
     public void run(double flPow, double frPow, double brPow, double blPow, double dt) {
@@ -39,7 +61,7 @@ public class MecanumDriveModel implements Model {
         br.run(brPow, dt);
 
         yd = r * (bl.getV() + br.getV() + fl.getV() + fr.getV())/4;
-        xd = r * -(bl.getV() - br.getV() - fl.getV() + fr.getV())/4;
+        xd = r * (bl.getV() - br.getV() - fl.getV() + fr.getV())/4;
         Td = r * -(-bl.getV() + br.getV() - fl.getV() + fr.getV())/(4 * Math.hypot(l, b));
 
         T += Td*dt;
@@ -64,12 +86,20 @@ public class MecanumDriveModel implements Model {
         Td = 0;
     }
 
-    public double getY() {
-        return y;
+    public double getTRad() {
+        return T;
     }
 
-    public double getX() {
-        return x;
+    public double getTDeg() {
+        return T*180/(Math.PI);
+    }
+
+    public double getYIn() {
+        return y*Constants.inPerM;
+    }
+
+    public double getXIn() {
+        return x*Constants.inPerM;
     }
 
 }

@@ -5,9 +5,14 @@ public class Kinematic {
     double x;
     double y;
 
+    double prevX, Qx = 0.1, Rx = 0.1, Px = 1, Kx = 1, prevXp = Px,
+            prevY, Qy = 0.1, Ry = 0.1, Py = 1, Ky = 1, prevYp= Py;
+
     public Kinematic() {
         x = 0.0;
         y = 0.0;
+        prevX = x;
+        prevY = y;
     }
 
     public Kinematic(double x, double y) {
@@ -53,6 +58,22 @@ public class Kinematic {
         return new Kinematic(sumX / xLen, sumY / yLen);
     }
 
+    // u is model estimate
+    public void kalmanFilter(double ux, double uy) {
+        double modelX = prevX + ux;
+        double modelY = prevY + uy;
+
+        Px = prevXp + Qx;
+        Py = prevYp + Qy;
+
+        Kx = Px/(Px + Rx);
+        Ky = Py/(Py + Ry);
+
+        add(new Kinematic(Kx * (x - modelX), Ky * (y - modelY)));
+
+        prevX = x; prevY = y;
+        prevXp = Px; prevYp = Py;
+    }
     public void filter(double threshold) {
         if (Math.abs(x) < threshold) {
             x = 0;

@@ -12,12 +12,14 @@ import org.firstinspires.ftc.teamcode.dreamcode.States.OCV;
 import org.firstinspires.ftc.teamcode.dreamcode.States.State;
 import org.firstinspires.ftc.teamcode.lib.drivers.Motors;
 import org.firstinspires.ftc.teamcode.lib.physics.Kinematic;
+import org.firstinspires.ftc.teamcode.lib.physics.MecanumDriveModel;
 import org.firstinspires.ftc.teamcode.lib.util.MathFx;
 
 public class StateEstimator implements Subsystem, State {
 
     double a, a0, x0, y0, sI, s, sdot;
     Kinematic pos = new Kinematic(), vel = new Kinematic();
+    MecanumDriveModel model;
     IMU imu;
     MKE mke;
     OCV vision;
@@ -34,6 +36,7 @@ public class StateEstimator implements Subsystem, State {
         y0 = 0;
         sI = 0;
         s = 0;
+        model = new MecanumDriveModel(1, 16./Constants.inPerM, 16./Constants.inPerM);
     }
 
     public StateEstimator(IMU imu, MKE mke, OCV vision, boolean scanning) {
@@ -64,12 +67,17 @@ public class StateEstimator implements Subsystem, State {
                 e.printStackTrace();
             }
         }
+        model.run(mke.getFlPow(), mke.getFrPow(), mke.getBrPow(), mke.getBlPow(), dt);
         imu.update(dt, telemetry);
         mke.update(dt, telemetry);
         pos = Kinematic.dataFusion(new Kinematic[]{imu.getPos(), mke.getPos()}, weights);
         pos = pos.add(new Kinematic(x0, y0));
+        pos.kalmanFilter(model.getXIn(), model.getYIn());
         a = MathFx.meanDataFusion(new double[]{mke.getA(), imu.getA()}, new double[]{1, 0}, a0);
         vel = new Kinematic(mke.getX_dot(), mke.getY_dot());
+
+
+
         telemetry.addData("X: ", pos.X());
         telemetry.addData("Y: ", pos.Y());
         telemetry.addData("A: ", Math.toDegrees(a));

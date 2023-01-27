@@ -178,4 +178,20 @@ public class MKE extends DriveState {
         return y_dot;
     }
 
+    public double getFlPow() {
+        return fl.getPower();
+    }
+
+    public double getFrPow() {
+        return fr.getPower();
+    }
+
+    public double getBlPow() {
+        return bl.getPower();
+    }
+
+    public double getBrPow() {
+        return br.getPower();
+    }
+
 }
