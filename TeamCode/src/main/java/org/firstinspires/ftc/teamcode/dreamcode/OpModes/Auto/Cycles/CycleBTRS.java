@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Autonomous
-    public class BTRSCycle extends AutoTemplate {
+    public class CycleBTRS extends AutoTemplate {
         private double tile = 1;
         private double[] myJunc = {Constants.LOW_GOAL, Constants.MID_GOAL, Constants.HIGH_GOAL}; // An array of junction heights in an order to fit the cycle
         private double x = 1.65; // x position of the cone stack

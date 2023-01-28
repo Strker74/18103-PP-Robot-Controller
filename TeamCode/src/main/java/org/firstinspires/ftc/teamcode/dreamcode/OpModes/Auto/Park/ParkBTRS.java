@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Autonomous
-public class BTRSPark extends AutoTemplate {
+public class ParkBTRS extends AutoTemplate {
 
     @Override
     public void buildPath() {

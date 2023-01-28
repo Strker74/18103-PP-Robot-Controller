@@ -162,7 +162,7 @@ public abstract class AutoTemplate extends Robot {
     public void setLiftHigh() {lift(Constants.HIGH_GOAL);}
     public void setLiftDownA() {lift(0);}
     public void raiseLift() {getIo().raiseLift100();}
-    public void lowerLift() {getIo().dropLift100();}
+    public void lowerLift() {getIo().dropLift100(); pathStep++; timer.reset();}
     //public void killPowerA() {super.getIo().killPower();}
 
     public void closeClaw() {
@@ -190,9 +190,18 @@ public abstract class AutoTemplate extends Robot {
     public void visionParking180(){
 
         switch(visionAnalysis){
-            case 0: path.add(() -> tilePointDrive(1.25, 1, 180)); break;
-            case 1: path.add(() -> tilePointDrive(1.25, 0, 180)); break;
-            case 2: path.add(() -> tilePointDrive(1.25, -1, 180)); break;
+            case 0: path.add(() -> tilePointDrive(1.17, 0.9, 180)); break;
+            case 1: path.add(() -> tilePointDrive(1.1, -0.05, 180)); break;
+            case 2: path.add(() -> tilePointDrive(1.1, -1.1, 180)); break;
+        }
+    }
+
+    public void visionParking2(){
+
+        switch(visionAnalysis){
+            case 0: path.add(() -> tilePointDrive(1.17, 1, 180)); break;
+            case 1: path.add(() -> tilePointDrive(1.1, -0.05, 180)); break;
+            case 2: path.add(() -> tilePointDrive(1.1, -0.95, 180)); break;
         }
     }
 
