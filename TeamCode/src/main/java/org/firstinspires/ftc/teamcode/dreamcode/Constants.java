@@ -16,9 +16,9 @@ public final class Constants {
     public static final double kgcmtoNm = 0.0980665;
 
     // IO Subsystem
-    public static final double LOW_GOAL = 450;
-    public static final double MID_GOAL = 675;
-    public static final double HIGH_GOAL = 950;
+    public static final double LOW_GOAL = 400;
+    public static final double MID_GOAL = 625;
+    public static final double HIGH_GOAL = 900;
     public static final double[] CONESTACKTICKS = {260d, 180d, 170d};
 
     // Vuforia Vision

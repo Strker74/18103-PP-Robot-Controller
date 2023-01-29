@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 import org.firstinspires.ftc.teamcode.lib.drivers.Motors;
 import org.firstinspires.ftc.teamcode.lib.motion.Profile;
 import org.firstinspires.ftc.teamcode.lib.util.MathFx;
@@ -17,12 +16,12 @@ public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
-    final double LIFTPOSMIN = -10, LIFTPOSMAX = 1200;
+    final double LIFTPOSMIN = -10, LIFTPOSMAX = 950;
     double fixLift = .0055;
-    final double kpuHold = 0.0075, kiHold = 0.001, kdHold = 0.000005, kpdHold = 0.005, kiHHold = 0.01,
+    final double kpuHold = 0.0075, kiHold = 0, kdHold = 0, kpdHold = 0.005,
             kvHold = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
             kaHold = 0, ksHold = 0.13, ksdHold = 0.65, liftPosHold = 0, liftPowHold = 0, biasHold = 0;
-    double kpu = 0.0075, ki = kiHold, kd = kdHold, kpd = 0.0075, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
+    double kpu = 0.0075, ki = 0, kd = 0, kpd = 0.005, kv = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
             ka = 0, ks = 0.13, ksd = 0.65, liftPos = 0, liftPow = 0, bias = 0;
     double integral = 0, derivative = 0;
     boolean isOff = true;
@@ -130,7 +129,7 @@ public class IO implements Subsystem {
         right.setPosition(0);
     }
 
-    public void setLiftMid() {liftPos = Constants.MID_GOAL;}
+    public void setLiftMid() {liftPos = 625;}
 
     public void raiseLift() {liftPos+=10;}
 
@@ -140,9 +139,9 @@ public class IO implements Subsystem {
 
     public void lowerLift(int i) {if(liftPos > 100+LIFTPOSMIN){liftPos-=(10*i);}}
 
-    public void setLiftHigh() {liftPos = Constants.HIGH_GOAL;}
+    public void setLiftHigh() {liftPos = 900;}
 
-    public void setLiftLow() {liftPos = Constants.LOW_GOAL;}
+    public void setLiftLow() {liftPos = 400;}
 
     public void AutoPosAdjustLift(double pos) {
         PosAdjustLift(pos * 25/Motors.GoBILDA_312.getTicksPerRev());
@@ -189,24 +188,12 @@ public class IO implements Subsystem {
     }
 
     public void gainScheduleKs() {
-        if (getTargetLiftPos() <= 25) {
+        if (getTargetLiftPos() <= 10) {
             ksd = 0;
             ks = 0;
-            kd = 0;
-            ki = 0;
-            kpu = 0;
-        } else if (getTargetLiftPos() >= 750) {
-            ksd = ksdHold;
-            ks = ksHold;
-            kd = kdHold;
-            ki = kiHHold;
-            kpu = 10*kpuHold;
         } else {
             ksd = ksdHold;
             ks = ksHold;
-            kd = kdHold;
-            ki = kiHold;
-            kpu = kpuHold;
         }
     }
 
