@@ -49,7 +49,6 @@ public class StateEstimator implements Subsystem, State {
         y0 = 0;
         sI = 0;
         s = 0;
-        model = new MecanumDriveModel(1, 16./Constants.inPerM, 16./Constants.inPerM);
     }
 
     @Override

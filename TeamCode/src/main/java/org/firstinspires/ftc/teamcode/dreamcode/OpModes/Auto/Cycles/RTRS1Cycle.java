@@ -5,8 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Autonomous
-public class CycleRTRS extends AutoTemplate {
-
+public class RTRS1Cycle extends AutoTemplate {
     @Override
     public void buildPath() {
         setStartA(0);
@@ -15,8 +14,9 @@ public class CycleRTRS extends AutoTemplate {
         //path.add(this::openClaw);
         path.add(() -> tilePointDrive(0, .95, 0));
         //path.add(this::setLiftLow); -> Set to highest cone height
+        path.add(() -> tilePointDrive(1, .95, 0));
         //path.add(() -> tilePointDrive(2, .9, 0));
-        sameSideCyclePark();
+        visionParkCycle();
     }
 
 

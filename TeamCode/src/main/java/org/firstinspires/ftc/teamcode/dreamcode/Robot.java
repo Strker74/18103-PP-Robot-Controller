@@ -57,18 +57,6 @@ public class Robot extends OpMode {
 
     @Override
     public void start() {
-        for (DcMotorEx motor : driveMotors) {
-            //motor.setPositionPIDFCoefficients(Constants.DRIVE_P);
-            motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        }
-
-        lift1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        lift1.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        lift2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        lift2.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
         timer.reset();
     }
 

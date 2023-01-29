@@ -16,7 +16,7 @@ public class IO implements Subsystem {
 
     DcMotorEx liftLeft, liftRight;
     Servo left, right;
-    final double LIFTPOSMIN = -10, LIFTPOSMAX = 950;
+    final double LIFTPOSMIN = -100, LIFTPOSMAX = 950;
     double fixLift = .0055;
     final double kpuHold = 0.0075, kiHold = 0, kdHold = 0, kpdHold = 0.005,
             kvHold = 1/Motors.GoBILDA_312.getSurfaceVelocity(2),
@@ -152,7 +152,7 @@ public class IO implements Subsystem {
     public void dropLift100() {liftPos -= 100;}
 
     public void setLiftDown() {
-        liftPos = 10;
+        liftPos = 0;
     }
 
     public double getTargetLiftPos() {
@@ -188,7 +188,7 @@ public class IO implements Subsystem {
     }
 
     public void gainScheduleKs() {
-        if (getTargetLiftPos() <= 10) {
+        if (getTargetLiftPos() == 0) {
             ksd = 0;
             ks = 0;
         } else {

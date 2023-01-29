@@ -7,7 +7,7 @@ package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.Park;
         import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Autonomous
-public class ParkBTBS extends AutoTemplate {
+public class BTBSPark extends AutoTemplate {
 
     @Override
     public void buildPath() {
@@ -17,7 +17,7 @@ public class ParkBTBS extends AutoTemplate {
         path.add(() -> tilePointDrive(0, 0, 0));
         path.add(() -> tilePointDrive(1, 0, 0));
         switch(visionAnalysis){
-            case 0: path.add(() -> tilePointDrive(1.1, 0.9, 0)); break;
+            case 0: path.add(() -> tilePointDrive(1.1, 1, 0)); break;
             case 1: path.add(() -> tilePointDrive(1.1, 0, 0)); break;
             case 2: path.add(() -> tilePointDrive(1.1, -1, 0)); break;
         }

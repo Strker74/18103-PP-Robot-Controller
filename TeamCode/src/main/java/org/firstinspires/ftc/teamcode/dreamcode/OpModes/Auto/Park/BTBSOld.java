@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Disabled
 @Autonomous
-public class ParkBTBSOld extends AutoTemplate {
+public class BTBSOld extends AutoTemplate {
 
     @Override
     public void buildPath() {
