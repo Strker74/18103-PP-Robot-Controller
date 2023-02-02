@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
-@Autonomous
-public class BTRSPark extends AutoTemplate {
+@Autonomous(group = "Park")
+public class ParkBTRS extends AutoTemplate {
 
     @Override
     public void buildPath() {
@@ -20,11 +20,13 @@ public class BTRSPark extends AutoTemplate {
         path.add(()-> tilePointDrive(1.3, .4, 90));
         path.add(this::openClaw);
         path.add(() -> pause(0.2));
+        /*
         switch(visionAnalysis){
             case 0: path.add(() -> tilePointDrive(1.1, 1, 90)); break;
             case 1: path.add(() -> tilePointDrive(1.1, 0, 90)); break;
             case 2: path.add(() -> tilePointDrive(1.1, -1, 90)); break;
         }
+        */
         //telemetry.addData("Auton Done!", visionAnalysis);
     }
 }

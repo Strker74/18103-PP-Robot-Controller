@@ -91,7 +91,7 @@ public class Drive implements Subsystem {
         //this.turn = turn;
         double v1 = -(-y - (turn * Constants.turnScale) - (x/Constants.strafeScale));
         double v2 = -(-y - (turn * Constants.turnScale) + (x/Constants.strafeScale));
-        double v3 = -(-y + (turn * Constants.turnScale) - (x/Constants.strafeScale)) * 4.5/3;
+        double v3 = -(-y + (turn * Constants.turnScale) - (x/Constants.strafeScale));
         double v4 = -(-y + (turn * Constants.turnScale) + (x/Constants.strafeScale)) *
                 Motors.GoBILDA_435.getRPM()/Motors.GoBILDA_312.getRPM();
 
@@ -154,7 +154,8 @@ public class Drive implements Subsystem {
     }
 
     public boolean WaypointDrive(StateEstimator robot, Profile xp, Profile yp, double af, double tx,
-                                 double ty, double ta, double dx, double dy, double da, double time) {
+                                 double ty, double ta, double dx, double dy, double da, double time,
+                                 DriveMode mode) {
         double ea = MathFx.radAngleWrap(af - robot.getA());
         double exp = (xp.getSetPoint() - robot.getX());
         double eyp = (yp.getSetPoint() - robot.getY());
@@ -164,7 +165,7 @@ public class Drive implements Subsystem {
             double ua = kpa * ea;
             double ux = kp1 * exp /*+ kv * exv*/;
             double uy = kp1 * eyp /*+ kv * eyv*/;
-            FCMecanumDrive(ux, uy, ua, DriveMode.Optimized, robot);
+            FCMecanumDrive(ux, uy, ua, mode, robot);
             return false;
         } else {
             stop();

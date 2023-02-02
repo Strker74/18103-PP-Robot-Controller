@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.dreamcode.Constants;
 import org.firstinspires.ftc.teamcode.dreamcode.Robot;
+import org.firstinspires.ftc.teamcode.dreamcode.States.DriveMode;
 import org.firstinspires.ftc.teamcode.lib.control.Path;
 import org.firstinspires.ftc.teamcode.lib.motion.Profile;
 import org.firstinspires.ftc.teamcode.lib.motion.TrapezoidalMotionProfile;
@@ -25,8 +26,7 @@ public abstract class AutoTemplate extends Robot {
     double tile = Constants.tile, startA = 0;
     public int visionAnalysis = 0;
     boolean increment = false;
-
-
+    DriveMode speed = DriveMode.Optimized;
     public abstract void buildPath();
 
     @Override
@@ -98,7 +98,7 @@ public abstract class AutoTemplate extends Robot {
 
         }
         if (super.getDrive().WaypointDrive(super.getEstimator(), px, py, a, tx, ty, ta,
-                dx/Math.abs(dx), dy/Math.abs(dy), da/Math.abs(da), timer.time())) {
+                dx/Math.abs(dx), dy/Math.abs(dy), da/Math.abs(da), timer.time(), speed)) {
             pathStep++;
             dx = null;
             dy = null;
@@ -113,6 +113,10 @@ public abstract class AutoTemplate extends Robot {
 
     public void tilePointDrive(double x, double y, double a) {
         pointDrive(x*tile*1.1, y*tile*1.1, a);
+    }
+
+    public void tilePointDriveUnscaled(double x, double y, double a) {
+        pointDrive(x*tile*1, y*tile*.9, a);
     }
 
     public void setStartA(double startA) {
@@ -154,6 +158,12 @@ public abstract class AutoTemplate extends Robot {
         }
     }
 
+    public void setSpeed(DriveMode mode) {
+        this.speed = mode;
+        pathStep++;
+        timer.reset();
+    }
+
     public void setLiftLow() {lift(Constants.LOW_GOAL);}
     public void setLiftMid() {lift(Constants.MID_GOAL);}
     public void setLiftLowA() {lift(450);}
@@ -170,8 +180,6 @@ public abstract class AutoTemplate extends Robot {
         pathStep++;
         timer.reset();
     }
-
-
 
     public void openClaw() {
         super.getIo().openClaw();
@@ -195,6 +203,24 @@ public abstract class AutoTemplate extends Robot {
             case 2: path.add(() -> tilePointDrive(1.25, -1, 180)); break;
         }
     }
+    public void visionParking(double y, double a){
+
+        switch(visionAnalysis){
+            case 0: path.add(() -> tilePointDrive(1, y + 1, a)); break;
+            case 1: path.add(() -> tilePointDrive(1, y, a)); break;
+            case 2: path.add(() -> tilePointDrive(1, y - 0.85, a)); break;
+        }
+    }
+
+    public void SportVisionParking(double a){
+
+        switch(visionAnalysis){
+            case 0: path.add(() -> tilePointDriveUnscaled(1, 1, a)); break;
+            case 1: path.add(() -> tilePointDriveUnscaled(1, 0, a)); break;
+            case 2: path.add(() -> tilePointDriveUnscaled(1, -0.85, a)); break;
+        }
+    }
+
 
     // Assumes setStartA(180);
     public void visionParkCycle() {
