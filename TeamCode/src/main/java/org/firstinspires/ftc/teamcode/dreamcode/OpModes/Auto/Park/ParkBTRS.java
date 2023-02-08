@@ -14,12 +14,11 @@ public class ParkBTRS extends AutoTemplate {
         path.add(() -> tilePointDrive(0, -0.075, 0));
         path.add(this::closeClaw);
         path.add(() -> pause(1));
-        path.add(() -> lift(200));
-        path.add(() -> tilePointDrive(1.1, 0, 0));
-        path.add(this::setLiftMid);
-        path.add(()-> tilePointDrive(1.3, .4, 90));
-        path.add(this::openClaw);
-        path.add(() -> pause(0.2));
+        path.add(() -> tilePointDrive(0, -1.075, 0));
+        path.add(()-> tilePointDrive(1.3, -1.075, 0));
+        //path.add(this::setLiftMid);
+        //path.add(this::openClaw);
+        //path.add(() -> pause(0.2));
         /*
         switch(visionAnalysis){
             case 0: path.add(() -> tilePointDrive(1.1, 1, 90)); break;

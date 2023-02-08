@@ -17,7 +17,7 @@ public class VisionPark extends AutoTemplate {
         //path.add(() -> tilePointDrive(.6, 0, 180));
         path.add(() -> tilePointDrive(1, 0, 180));
         switch(visionAnalysis){
-            case 0: path.add(() -> tilePointDrive(1, 1, 180)); break;
+            case 0: path.add(() -> tilePointDrive(1, .85, 180)); break;
             case 1: path.add(() -> tilePointDrive(1, 0, 180)); break;
             case 2: path.add(() -> tilePointDrive(1, -1, 180)); break;
         }

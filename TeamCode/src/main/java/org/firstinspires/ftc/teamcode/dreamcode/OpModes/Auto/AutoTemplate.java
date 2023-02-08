@@ -203,8 +203,14 @@ public abstract class AutoTemplate extends Robot {
             case 2: path.add(() -> tilePointDrive(1.25, -1, 180)); break;
         }
     }
+    public void visionParking(double x, double y, double a){
+        switch(visionAnalysis){
+            case 0: path.add(() -> tilePointDrive(x, y + 1, a)); break;
+            case 1: path.add(() -> tilePointDrive(x, y, a)); break;
+            case 2: path.add(() -> tilePointDrive(x, y - 0.85, a)); break;
+        }
+    }
     public void visionParking(double y, double a){
-
         switch(visionAnalysis){
             case 0: path.add(() -> tilePointDrive(1, y + 1, a)); break;
             case 1: path.add(() -> tilePointDrive(1, y, a)); break;
