@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.Park;
 
-        import static java.lang.Thread.sleep;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-        import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-        import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
+import org.firstinspires.ftc.teamcode.dreamcode.OpModes.Auto.AutoTemplate;
 
 @Autonomous(group = "Park")
 public class ParkBTBS extends AutoTemplate {
