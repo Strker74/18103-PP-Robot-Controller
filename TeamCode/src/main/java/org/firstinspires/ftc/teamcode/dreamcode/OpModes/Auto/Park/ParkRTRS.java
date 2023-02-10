@@ -31,9 +31,10 @@ public class ParkRTRS extends AutoTemplate {
             path.add(() -> tilePointDrive(x, y, a + 90));
             break;
          case 2:
-            path.add(() -> tilePointDriveUnscaled(x, y - 0.9, a));
-            path.add(() -> tilePointDriveUnscaled(x, y - 0.9, a+90));
-            path.add(() -> tilePointDriveUnscaled(x+.5, y - 0.9 - .15, a+90));
+            path.add(() -> tilePointDriveUnscaled(x, y - 1.15, a));
+            path.add(() -> tilePointDriveUnscaled(x + .4, y - 1.2, a+90));
+            path.add(this::closeClaw);
+            //path.add(() -> tilePointDriveUnscaled(x+.5, y - 0.9 - .15, a+90));
             break;
       }
    }
