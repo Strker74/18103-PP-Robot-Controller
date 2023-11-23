@@ -1,4 +1,4 @@
-## FTC Team 18103
+## FTC Team 18103 Power Play
 This repository contains the code for FTC Team 18103's 2022-23 season. Refer to the following for more: 
 - Team Website: https://www.nthdegree.tech/
 - Team Documentation: https://drive.google.com/file/d/1u7LdwpXYy8MoASo6dt3KXjsTDsV1Y6OD/view?usp=sharing
